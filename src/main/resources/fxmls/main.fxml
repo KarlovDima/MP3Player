@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import com.jfoenix.controls.JFXSlider?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="459.0" prefWidth="907.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <VBox fillWidth="false">
+            <children>
+                <HBox fillHeight="false" prefHeight="211.0" prefWidth="497.0">
+                    <children>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../images/icon.png" />
+                            </image>
+                            <HBox.margin>
+                                <Insets left="30.0" top="30.0" />
+                            </HBox.margin>
+                        </ImageView>
+                        <VBox fillWidth="false" prefHeight="122.0">
+                            <children>
+                                <Label prefHeight="38.0" text="Not Afraid" textFill="#878384">
+                                    <font>
+                                        <Font name="Tahoma" size="30.0" />
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets left="10.0" />
+                                    </VBox.margin>
+                                </Label>
+                                <Label text="Eminem" textFill="#878384">
+                                    <font>
+                                        <Font name="Tahoma" size="20.0" />
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets left="10.0" />
+                                    </VBox.margin>
+                                </Label>
+                                <Label text="Recovery" textFill="#878384">
+                                    <font>
+                                        <Font name="Tahoma" size="20.0" />
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets left="10.0" />
+                                    </VBox.margin>
+                                </Label>
+                            </children>
+                            <HBox.margin>
+                                <Insets top="30.0" />
+                            </HBox.margin>
+                        </VBox>
+                        <VBox prefHeight="282.0" prefWidth="38.0">
+                            <children>
+                                <ImageView fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../images/volume.png" />
+                                    </image>
+                                    <VBox.margin>
+                                        <Insets />
+                                    </VBox.margin>
+                                </ImageView>
+                                <JFXSlider minHeight="168.0" orientation="VERTICAL" prefHeight="168.0" prefWidth="20.0" stylesheets="@../css/volume_slider.css">
+                                    <VBox.margin>
+                                        <Insets left="10.0" top="10.0" />
+                                    </VBox.margin>
+                                    <opaqueInsets>
+                                        <Insets />
+                                    </opaqueInsets>
+                                </JFXSlider>
+                            </children>
+                            <HBox.margin>
+                                <Insets left="125.0" right="10.0" top="7.0" />
+                            </HBox.margin>
+                        </VBox>
+                    </children>
+                </HBox>
+                <VBox AnchorPane.bottomAnchor="0.0">
+                    <children>
+                        <Label text="2:35/3:30" textFill="#878384">
+                            <font>
+                                <Font name="Tahoma" size="20.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets left="390.0" top="21.0" />
+                            </VBox.margin>
+                        </Label>
+                        <JFXSlider stylesheets="@../css/length_slider.css" value="50.0">
+                            <opaqueInsets>
+                                <Insets />
+                            </opaqueInsets>
+                            <VBox.margin>
+                                <Insets bottom="25.0" left="20.0" top="27.0" />
+                            </VBox.margin>
+                        </JFXSlider>
+                    </children>
+                </VBox>
+                <HBox alignment="TOP_CENTER" style="-fx-background-color: cb5e64;" AnchorPane.bottomAnchor="0.0">
+                    <children>
+                        <ImageView fitHeight="27.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../images/repeat_song.png" />
+                            </image>
+                            <HBox.margin>
+                                <Insets bottom="44.0" left="25.0" top="44.0" />
+                            </HBox.margin>
+                        </ImageView>
+                        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../images/previous_song.png" />
+                            </image>
+                            <HBox.margin>
+                                <Insets bottom="30.0" left="60.0" top="30.0" />
+                            </HBox.margin>
+                        </ImageView>
+                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../images/play.png" />
+                            </image>
+                            <HBox.margin>
+                                <Insets bottom="16.0" left="50.0" top="16.0" />
+                            </HBox.margin>
+                        </ImageView>
+                        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../images/next_song.png" />
+                            </image>
+                            <HBox.margin>
+                                <Insets bottom="30.0" left="50.0" top="30.0" />
+                            </HBox.margin>
+                        </ImageView>
+                        <ImageView fitHeight="33.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../images/shuffle_song.png" />
+                            </image>
+                            <HBox.margin>
+                                <Insets bottom="44.0" left="50.0" right="30.0" top="44.0" />
+                            </HBox.margin>
+                        </ImageView>
+                    </children>
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </HBox>
+            </children>
+        </VBox>
+        <VBox prefHeight="459.0" prefWidth="433.0" HBox.hgrow="ALWAYS">
+            <children>
+                <AnchorPane maxHeight="-Infinity" prefHeight="49.0" style="-fx-background-color: cb5e64;" VBox.vgrow="ALWAYS">
+                    <children>
+                        <Label layoutX="11.0" layoutY="3.0" prefHeight="38.0" prefWidth="189.0" text="Recovery" textFill="WHITE" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="202.0">
+                            <font>
+                                <Font name="Tahoma" size="30.0" />
+                            </font>
+                        </Label>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="188.0" pickOnBounds="true" preserveRatio="true" y="10.0" AnchorPane.rightAnchor="105.0">
+                            <image>
+                                <Image url="@../images/add_playlist.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="220.0" pickOnBounds="true" preserveRatio="true" y="9.0" AnchorPane.rightAnchor="75.0">
+                            <image>
+                                <Image url="@../images/delete_playlist.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="249.0" pickOnBounds="true" preserveRatio="true" y="9.0" AnchorPane.rightAnchor="40.0">
+                            <image>
+                                <Image url="@../images/previous_playlist.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="280.0" pickOnBounds="true" preserveRatio="true" y="9.0" AnchorPane.rightAnchor="10.0">
+                            <image>
+                                <Image url="@../images/next_playlist.png" />
+                            </image>
+                        </ImageView>
+                    </children>
+                </AnchorPane>
+                <AnchorPane style="-fx-background-color: a54a51;" VBox.vgrow="ALWAYS" />
+            </children>
+        </VBox>
+    </children>
+</HBox>

@@ -1,0 +1,8 @@
+.jfx-slider .thumb{
+   -fx-background-color:#cb5e64;
+       -fx-pref-height: 25;
+       -fx-pref-width: 25;
+}
+.jfx-slider .track {
+    -fx-pref-height:10;
+}
