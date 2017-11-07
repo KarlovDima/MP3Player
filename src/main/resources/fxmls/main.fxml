@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import java.lang.*?>
 <?import com.jfoenix.controls.JFXSlider?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="459.0" prefWidth="907.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="459.0" prefWidth="907.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.karlov.mp3player.controllers.MainController">
     <children>
         <VBox fillWidth="false">
             <children>
@@ -56,17 +60,17 @@
                         </VBox>
                         <VBox prefHeight="282.0" prefWidth="38.0">
                             <children>
-                                <ImageView fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
+                                <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@../images/volume.png" />
                                     </image>
                                     <VBox.margin>
-                                        <Insets />
+                                        <Insets top="15.0" />
                                     </VBox.margin>
                                 </ImageView>
-                                <JFXSlider minHeight="168.0" orientation="VERTICAL" prefHeight="168.0" prefWidth="20.0" stylesheets="@../css/volume_slider.css">
+                                <JFXSlider minHeight="157.0" orientation="VERTICAL" prefHeight="157.0" prefWidth="20.0" stylesheets="@../css/volume_slider.css">
                                     <VBox.margin>
-                                        <Insets left="10.0" top="10.0" />
+                                        <Insets left="10.0" top="12.0" />
                                     </VBox.margin>
                                     <opaqueInsets>
                                         <Insets />
@@ -86,7 +90,7 @@
                                 <Font name="Tahoma" size="20.0" />
                             </font>
                             <VBox.margin>
-                                <Insets left="390.0" top="21.0" />
+                                <Insets left="390.0" top="19.0" />
                             </VBox.margin>
                         </Label>
                         <JFXSlider stylesheets="@../css/length_slider.css" value="50.0">
@@ -150,36 +154,52 @@
         </VBox>
         <VBox prefHeight="459.0" prefWidth="433.0" HBox.hgrow="ALWAYS">
             <children>
-                <AnchorPane maxHeight="-Infinity" prefHeight="49.0" style="-fx-background-color: cb5e64;" VBox.vgrow="ALWAYS">
+                <AnchorPane maxHeight="-Infinity" prefHeight="95.0" prefWidth="402.0" style="-fx-background-color: cb5e64;" VBox.vgrow="ALWAYS">
                     <children>
-                        <Label layoutX="11.0" layoutY="3.0" prefHeight="38.0" prefWidth="189.0" text="Recovery" textFill="WHITE" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="202.0">
-                            <font>
-                                <Font name="Tahoma" size="30.0" />
-                            </font>
-                        </Label>
-                        <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="188.0" pickOnBounds="true" preserveRatio="true" y="10.0" AnchorPane.rightAnchor="105.0">
+                  <JFXTextField focusColor="WHITE" prefHeight="68.0" prefWidth="218.0" style="-fx-text-inner-color: white;" text="Recovery" unFocusColor="#cb5e64" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="170.0">
+                     <font>
+                        <Font name="Tahoma" size="34.0" />
+                     </font>
+                  </JFXTextField>
+                        <ImageView fx:id="addPlaylist" fitHeight="35.0" fitWidth="35.0" layoutX="188.0" pickOnBounds="true" preserveRatio="true" y="21.0" AnchorPane.rightAnchor="130.0">
                             <image>
                                 <Image url="@../images/add_playlist.png" />
                             </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                         </ImageView>
-                        <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="220.0" pickOnBounds="true" preserveRatio="true" y="9.0" AnchorPane.rightAnchor="75.0">
+                        <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="220.0" pickOnBounds="true" preserveRatio="true" y="19.0" AnchorPane.rightAnchor="93.0">
                             <image>
                                 <Image url="@../images/delete_playlist.png" />
                             </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                         </ImageView>
-                        <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="249.0" pickOnBounds="true" preserveRatio="true" y="9.0" AnchorPane.rightAnchor="40.0">
+                        <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="249.0" pickOnBounds="true" preserveRatio="true" y="19.0" AnchorPane.rightAnchor="50.0">
                             <image>
                                 <Image url="@../images/previous_playlist.png" />
                             </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                         </ImageView>
-                        <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="280.0" pickOnBounds="true" preserveRatio="true" y="9.0" AnchorPane.rightAnchor="10.0">
+                        <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="280.0" pickOnBounds="true" preserveRatio="true" y="19.0" AnchorPane.rightAnchor="10.0">
                             <image>
                                 <Image url="@../images/next_playlist.png" />
                             </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                         </ImageView>
                     </children>
                 </AnchorPane>
-                <AnchorPane style="-fx-background-color: a54a51;" VBox.vgrow="ALWAYS" />
+            <ScrollPane fitToWidth="true" focusTraversable="false" hbarPolicy="NEVER" prefHeight="411.0" prefWidth="402.0" style="-fx-background-color: a54a51;" styleClass="edge-to-edge" vbarPolicy="NEVER">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="388.0" prefWidth="402.0" style="-fx-background-color: a54a51;" />
+              </content>
+            </ScrollPane>
             </children>
         </VBox>
     </children>

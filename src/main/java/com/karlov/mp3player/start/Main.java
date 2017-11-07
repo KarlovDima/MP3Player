@@ -1,5 +1,6 @@
 package com.karlov.mp3player.start;
 
+import com.karlov.mp3player.controllers.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,9 +11,14 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("fxmls/main.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root,907, 459));
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getClassLoader().getResource("fxmls/main.fxml"));
+        Parent fxmlMain = fxmlLoader.load();
+        MainController mainController = fxmlLoader.getController();
+        mainController.setMainStage(primaryStage);
+
+        primaryStage.setTitle("MP3 Player");
+        primaryStage.setScene(new Scene(fxmlMain,907, 459));
         primaryStage.setMaxHeight(495);
         primaryStage.setMinHeight(495);
         primaryStage.setMinWidth(925);
