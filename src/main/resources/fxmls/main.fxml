@@ -161,7 +161,7 @@
                         <Font name="Tahoma" size="34.0" />
                      </font>
                   </JFXTextField>
-                        <ImageView fx:id="addPlaylist" fitHeight="35.0" fitWidth="35.0" layoutX="188.0" pickOnBounds="true" preserveRatio="true" y="21.0" AnchorPane.rightAnchor="130.0">
+                        <ImageView fx:id="ivAddPlaylist" onMouseClicked="#onAddPlaylistClick" fitHeight="35.0" fitWidth="35.0" layoutX="188.0" pickOnBounds="true" preserveRatio="true" y="21.0" AnchorPane.rightAnchor="130.0">
                             <image>
                                 <Image url="@../images/add_playlist.png" />
                             </image>

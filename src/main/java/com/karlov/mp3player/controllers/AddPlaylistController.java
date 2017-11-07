@@ -16,10 +16,17 @@ public class AddPlaylistController {
     JFXButton btnSave;
 
     @FXML
+    JFXButton btnCancel;
+
+    @FXML
     public void onPathButtonClick(ActionEvent actionEvent) {
     }
 
     @FXML
     public void onSaveButtonClick(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    public void onCancelButtonClick(ActionEvent actionEvent) {
     }
 }
