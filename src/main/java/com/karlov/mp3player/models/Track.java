@@ -1,37 +1,38 @@
 package com.karlov.mp3player.models;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 
 public class Track {
 
-    private StringProperty name;
+    private StringProperty title;
     private String path;
     private Media media;
     private String album;
     private String artist;
-    private String title;
     private int year;
     private Image image;
 
     public Track() {
+        title=new SimpleStringProperty("");
     }
 
     public Track(String path) {
         this.path = path;
     }
 
-    public String getName() {
-        return name.get();
+    public String getTitle() {
+        return title.get();
     }
 
-    public StringProperty nameProperty() {
-        return name;
+    public StringProperty setTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name.set(name);
+    public void setTitle(String title) {
+        this.title.set(title);
     }
 
     public String getPath() {
@@ -64,14 +65,6 @@ public class Track {
 
     public void setArtist(String artist) {
         this.artist = artist;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public int getYear() {
