@@ -1,16 +1,22 @@
 package com.karlov.mp3player.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextField;
 import com.karlov.mp3player.models.Track;
 import com.karlov.mp3player.models.Tracklist;
-import com.mpatric.mp3agic.*;
+import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.Mp3File;
+import com.mpatric.mp3agic.UnsupportedTagException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.image.Image;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
@@ -30,8 +36,19 @@ public class AddPlaylistController {
     @FXML
     JFXButton btnCancel;
 
-    Tracklist tracklist = new Tracklist();
+    @FXML
+    StackPane stackPane;
 
+    private Tracklist tracklist;
+
+    public void setTracklist(Tracklist tracklist) {
+        this.tracklist = tracklist;
+        tfPlaylistName.setText(tracklist.getName());
+    }
+
+    public Tracklist getTracklist() {
+        return tracklist;
+    }
 
     @FXML
     public void onPathButtonClick(ActionEvent actionEvent) {
@@ -40,22 +57,26 @@ public class AddPlaylistController {
 
         File selectedDirectory = getSelectedDirectory(stage);
 
-        setTracklistNameToTextField(selectedDirectory.getName());
+        if (selectedDirectory == null)
+            return;
+
+        if (tfPlaylistName.getText().equals(""))
+            setTracklistNameToTextField(selectedDirectory.getName());
         File[] mp3Files = getFilesInDirectory(selectedDirectory);
         tracklist.setName(selectedDirectory.getName());
         tracklist.setPath(selectedDirectory.getPath());
         tracklist.setTrackObservableList(getTracksObservableList(mp3Files));
     }
 
-    private ObservableList<Track> getTracksObservableList(File[] files){
+    private ObservableList<Track> getTracksObservableList(File[] files) {
         ObservableList<Track> tracks = FXCollections.observableArrayList();
         Track track;
         ID3v2 id3v2Tag;
-        for (File file:files) {
+        for (File file : files) {
             try {
-                Mp3File mp3File=new Mp3File(file);
-                id3v2Tag=mp3File.getId3v2Tag();
-                track=new Track();
+                Mp3File mp3File = new Mp3File(file);
+                id3v2Tag = mp3File.getId3v2Tag();
+                track = new Track();
                 track.setAlbum(id3v2Tag.getAlbum());
                 track.setArtist(id3v2Tag.getArtist());
                 track.setTitle(id3v2Tag.getTitle());
@@ -89,9 +110,29 @@ public class AddPlaylistController {
 
     @FXML
     public void onSaveButtonClick(ActionEvent actionEvent) {
+        if (tracklist.getPath() == null) {
+            showDialog();
+        } else
+            onCancelButtonClick(actionEvent);
+    }
+
+    private void showDialog() {
+        JFXDialogLayout content = new JFXDialogLayout();
+        content.setPrefWidth(150);
+        JFXDialog dialog = new JFXDialog(stackPane, content, JFXDialog.DialogTransition.BOTTOM);
+
+        content.setHeading(new Text("Error"));
+        content.setBody(new Text("Choose the directory with your music"));
+        JFXButton button = new JFXButton("OK");
+        button.setOnAction(event -> dialog.close());
+        content.setActions(button);
+        dialog.show();
     }
 
     @FXML
     public void onCancelButtonClick(ActionEvent actionEvent) {
+        Node node = (Node) actionEvent.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        stage.hide();
     }
 }
