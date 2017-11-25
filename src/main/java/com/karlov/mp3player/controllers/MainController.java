@@ -37,6 +37,7 @@ public class MainController {
     private AddPlaylistController addPlaylistController;
     private Parent fxmlAddPlaylist;
     private ObservableList<Playlist> playlistObservableList = FXCollections.observableArrayList();
+    private int currentPlaylist;
 
     public void setMainStage(Stage mainStage) {
         this.mainStage = mainStage;
@@ -60,10 +61,11 @@ public class MainController {
 
     private void addPlaylist(Playlist playlist) {
         playlistObservableList.add(addPlaylistController.getPlaylist());
+        currentPlaylist = playlistObservableList.size() - 1;
     }
 
     private void setPlaylistNameToTextField(String name) {
-        tfPlaylistName.setText(playlistObservableList.get(playlistObservableList.size() - 1).getName());
+        tfPlaylistName.setText(name);
     }
 
     private void fillPlaylist(ObservableList<Track> tracks) {
@@ -139,5 +141,33 @@ public class MainController {
             addPlaylistStage.initOwner(mainStage);
         }
         addPlaylistStage.showAndWait();
+    }
+
+    public void onPreviousPlaylistClick(MouseEvent mouseEvent) {
+        if(playlistObservableList.size()<2)
+            return;
+        if(currentPlaylist-1==-1)
+            currentPlaylist=playlistObservableList.size()-1;
+        else
+            currentPlaylist--;
+
+        loadPlaylist();
+    }
+
+    public void onNextPlaylistClick(MouseEvent mouseEvent) {
+        if(playlistObservableList.size()<2)
+            return;
+        if(currentPlaylist+1==playlistObservableList.size())
+            currentPlaylist=0;
+        else
+            currentPlaylist++;
+
+        loadPlaylist();
+    }
+
+    private void loadPlaylist(){
+        ObservableList<Track> tracks = playlistObservableList.get(currentPlaylist).getTrackObservableList();
+        setPlaylistNameToTextField(playlistObservableList.get(currentPlaylist).getName());
+        fillPlaylist(tracks);
     }
 }
