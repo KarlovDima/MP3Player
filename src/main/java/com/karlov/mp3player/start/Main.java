@@ -18,11 +18,11 @@ public class Main extends Application {
         mainController.setMainStage(primaryStage);
 
         primaryStage.setTitle("MP3 Player");
-        primaryStage.setScene(new Scene(fxmlMain,907, 459));
+        primaryStage.setScene(new Scene(fxmlMain,971, 459));
         primaryStage.setMaxHeight(495);
         primaryStage.setMinHeight(495);
-        primaryStage.setMinWidth(925);
-        primaryStage.setMaxWidth(1200);
+        primaryStage.setMinWidth(987);
+        primaryStage.setMaxWidth(1300);
 
         primaryStage.show();
     }

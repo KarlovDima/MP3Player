@@ -4,16 +4,16 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 
-public class Tracklist {
+public class Playlist {
     private StringProperty name;
     private String path;
     private ObservableList<Track> trackObservableList;
 
-    public Tracklist() {
+    public Playlist() {
         name=new SimpleStringProperty("");
     }
 
-    public Tracklist(StringProperty name, String path, ObservableList<Track> trackObservableList) {
+    public Playlist(StringProperty name, String path, ObservableList<Track> trackObservableList) {
         this.name = name;
         this.path = path;
         this.trackObservableList = trackObservableList;
@@ -21,10 +21,6 @@ public class Tracklist {
 
     public String getName() {
         return name.get();
-    }
-
-    public StringProperty nameProperty() {
-        return name;
     }
 
     public void setName(String name) {

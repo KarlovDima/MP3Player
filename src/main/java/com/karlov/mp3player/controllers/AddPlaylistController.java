@@ -5,7 +5,7 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextField;
 import com.karlov.mp3player.models.Track;
-import com.karlov.mp3player.models.Tracklist;
+import com.karlov.mp3player.models.Playlist;
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
@@ -39,15 +39,15 @@ public class AddPlaylistController {
     @FXML
     StackPane stackPane;
 
-    private Tracklist tracklist;
+    private Playlist playlist;
 
-    public void setTracklist(Tracklist tracklist) {
-        this.tracklist = tracklist;
-        tfPlaylistName.setText(tracklist.getName());
+    public void setPlaylist(Playlist playlist) {
+        this.playlist = playlist;
+        tfPlaylistName.setText(playlist.getName());
     }
 
-    public Tracklist getTracklist() {
-        return tracklist;
+    public Playlist getPlaylist() {
+        return playlist;
     }
 
     @FXML
@@ -61,11 +61,10 @@ public class AddPlaylistController {
             return;
 
         if (tfPlaylistName.getText().equals(""))
-            setTracklistNameToTextField(selectedDirectory.getName());
+            setPlaylistNameToTextField(selectedDirectory.getName());
         File[] mp3Files = getFilesInDirectory(selectedDirectory);
-        tracklist.setName(selectedDirectory.getName());
-        tracklist.setPath(selectedDirectory.getPath());
-        tracklist.setTrackObservableList(getTracksObservableList(mp3Files));
+        playlist.setPath(selectedDirectory.getPath());
+        playlist.setTrackObservableList(getTracksObservableList(mp3Files));
     }
 
     private ObservableList<Track> getTracksObservableList(File[] files) {
@@ -83,6 +82,7 @@ public class AddPlaylistController {
                 track.setPath(file.getPath());
                 track.setYear(Integer.parseInt(id3v2Tag.getYear()));
                 tracks.add(track);
+                track.setLength(getLength((int) mp3File.getLengthInSeconds()));
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (UnsupportedTagException e) {
@@ -104,16 +104,27 @@ public class AddPlaylistController {
         return directory.listFiles((dir, name) -> name.toLowerCase().endsWith(".mp3"));
     }
 
-    private void setTracklistNameToTextField(String name) {
+    private void setPlaylistNameToTextField(String name) {
         tfPlaylistName.setText(name);
+    }
+
+    private String getLength(int lengthInSeconds) {
+        int minutes = lengthInSeconds / 60;
+        int seconds = lengthInSeconds - minutes * 60;
+        if (seconds < 10)
+            return minutes + ":0" + seconds;
+        return minutes + ":" + seconds;
+
     }
 
     @FXML
     public void onSaveButtonClick(ActionEvent actionEvent) {
-        if (tracklist.getPath() == null) {
+        if (playlist.getPath() == null) {
             showDialog();
-        } else
+        } else {
+            playlist.setName(tfPlaylistName.getText());
             onCancelButtonClick(actionEvent);
+        }
     }
 
     private void showDialog() {

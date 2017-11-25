@@ -1,0 +1,18 @@
+.jfx-list-view .scroll-bar:vertical .increment-arrow,
+.jfx-list-view .scroll-bar:vertical .decrement-arrow,
+.jfx-list-view .scroll-bar:vertical .increment-button,
+.jfx-list-view .scroll-bar:vertical .decrement-button {
+    -fx-padding:0;
+}
+
+.jfx-list-cell {
+    -fx-background-color: #a54a51;
+}
+
+.jfx-list-cell:selected {
+    -fx-background-color: #cb5e64;
+}
+
+.jfx-list-cell .jfx-rippler {
+    -fx-opacity: 0;
+}

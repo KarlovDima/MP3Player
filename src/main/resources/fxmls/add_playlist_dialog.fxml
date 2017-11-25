@@ -2,77 +2,81 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-
-
-<StackPane fx:id="stackPane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.karlov.mp3player.controllers.AddPlaylistController">
-   <children>
-      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="151.0" prefWidth="441.0" style="-fx-background-color: cb5e64;">
-          <children>
-              <HBox prefHeight="89.0" prefWidth="441.0">
-                  <children>
-                      <Label prefHeight="38.0" text="Name" textFill="WHITE">
-                          <font>
-                              <Font name="Tahoma" size="30.0" />
-                          </font>
-                          <HBox.margin>
-                              <Insets left="20.0" top="20.0" />
-                          </HBox.margin>
-                      </Label>
-                      <JFXTextField fx:id="tfPlaylistName" focusColor="WHITE" prefHeight="58.0" prefWidth="297.0" promptText="&lt;Auto Name&gt;" style="-fx-text-inner-color: white; -fx-prompt-text-fill: white;" unFocusColor="#a54a51">
-                          <font>
-                              <Font name="Tahoma" size="30.0" />
-                          </font>
-                          <HBox.margin>
-                              <Insets left="25.0" top="11.0" />
-                          </HBox.margin>
-                      </JFXTextField>
-                  </children>
-              </HBox>
-              <HBox prefHeight="74.0" prefWidth="441.0">
-                  <children>
-                      <JFXButton fx:id="btnPlaylistPath" onAction="#onPathButtonClick" prefHeight="49.0" prefWidth="102.0" text="Path" textFill="WHITE">
-                          <font>
-                              <Font name="Tahoma" size="24.0" />
-                          </font>
-                          <HBox.margin>
-                              <Insets left="20.0" top="7.0" />
-                          </HBox.margin>
-                          <cursor>
-                              <Cursor fx:constant="HAND" />
-                          </cursor>
-                      </JFXButton>
-                      <JFXButton fx:id="btnSave" onAction="#onSaveButtonClick" prefHeight="49.0" prefWidth="102.0" text="Save" textFill="WHITE">
-                          <font>
-                              <Font name="Tahoma" size="24.0" />
-                          </font>
-                          <HBox.margin>
-                              <Insets left="45.0" top="7.0" />
-                          </HBox.margin>
-                          <cursor>
-                              <Cursor fx:constant="HAND" />
-                          </cursor>
-                      </JFXButton>
-                      <JFXButton fx:id="btnCancel" cancelButton="true" onAction="#onCancelButtonClick" prefHeight="49.0" prefWidth="102.0" text="Cancel" textFill="WHITE">
-                          <font>
-                              <Font name="Tahoma" size="24.0" />
-                          </font>
-                          <HBox.margin>
-                              <Insets left="45.0" top="7.0" />
-                          </HBox.margin>
-                          <cursor>
-                              <Cursor fx:constant="HAND" />
-                          </cursor>
-                      </JFXButton>
-                  </children>
-              </HBox>
-          </children>
-      </VBox>
-   </children>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<StackPane fx:id="stackPane" prefHeight="151.0" prefWidth="519.0" xmlns="http://javafx.com/javafx/8"
+           xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.karlov.mp3player.controllers.AddPlaylistController">
+    <children>
+        <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="151.0"
+              prefWidth="520.0" style="-fx-background-color: cb5e64;">
+            <children>
+                <HBox prefHeight="89.0" prefWidth="441.0">
+                    <children>
+                        <Label prefHeight="38.0" text="Name" textFill="WHITE">
+                            <font>
+                                <Font name="Tahoma" size="30.0"/>
+                            </font>
+                            <HBox.margin>
+                                <Insets left="20.0" top="20.0"/>
+                            </HBox.margin>
+                        </Label>
+                        <JFXTextField fx:id="tfPlaylistName" alignment="CENTER" focusColor="WHITE" prefHeight="58.0"
+                                      prefWidth="377.0" promptText="&lt;Auto Name&gt;"
+                                      style="-fx-text-inner-color: white; -fx-prompt-text-fill: white;"
+                                      unFocusColor="#a54a51">
+                            <font>
+                                <Font name="Tahoma" size="30.0"/>
+                            </font>
+                            <HBox.margin>
+                                <Insets left="25.0" top="11.0"/>
+                            </HBox.margin>
+                        </JFXTextField>
+                    </children>
+                </HBox>
+                <HBox prefHeight="74.0" prefWidth="441.0">
+                    <children>
+                        <JFXButton fx:id="btnPlaylistPath" onAction="#onPathButtonClick" prefHeight="49.0"
+                                   prefWidth="102.0" text="Path" textFill="WHITE">
+                            <font>
+                                <Font name="Tahoma" size="24.0"/>
+                            </font>
+                            <HBox.margin>
+                                <Insets left="50.0" top="7.0"/>
+                            </HBox.margin>
+                            <cursor>
+                                <Cursor fx:constant="HAND"/>
+                            </cursor>
+                        </JFXButton>
+                        <JFXButton fx:id="btnSave" onAction="#onSaveButtonClick" prefHeight="49.0" prefWidth="102.0"
+                                   text="Save" textFill="WHITE">
+                            <font>
+                                <Font name="Tahoma" size="24.0"/>
+                            </font>
+                            <HBox.margin>
+                                <Insets left="45.0" top="7.0"/>
+                            </HBox.margin>
+                            <cursor>
+                                <Cursor fx:constant="HAND"/>
+                            </cursor>
+                        </JFXButton>
+                        <JFXButton fx:id="btnCancel" cancelButton="true" onAction="#onCancelButtonClick"
+                                   prefHeight="49.0" prefWidth="102.0" text="Cancel" textFill="WHITE">
+                            <font>
+                                <Font name="Tahoma" size="24.0"/>
+                            </font>
+                            <HBox.margin>
+                                <Insets left="45.0" top="7.0"/>
+                            </HBox.margin>
+                            <cursor>
+                                <Cursor fx:constant="HAND"/>
+                            </cursor>
+                        </JFXButton>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
 </StackPane>

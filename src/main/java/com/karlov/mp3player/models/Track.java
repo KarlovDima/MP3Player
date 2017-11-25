@@ -12,6 +12,7 @@ public class Track {
     private Media media;
     private String album;
     private String artist;
+    private String length;
     private int year;
     private Image image;
 
@@ -25,10 +26,6 @@ public class Track {
 
     public String getTitle() {
         return title.get();
-    }
-
-    public StringProperty setTitle() {
-        return title;
     }
 
     public void setTitle(String title) {
@@ -81,5 +78,13 @@ public class Track {
 
     public void setImage(Image image) {
         this.image = image;
+    }
+
+    public String getLength() {
+        return length;
+    }
+
+    public void setLength(String length) {
+        this.length = length;
     }
 }
