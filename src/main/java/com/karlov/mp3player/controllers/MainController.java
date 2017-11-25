@@ -144,10 +144,10 @@ public class MainController {
     }
 
     public void onPreviousPlaylistClick(MouseEvent mouseEvent) {
-        if(playlistObservableList.size()<2)
+        if (playlistObservableList.size() < 2)
             return;
-        if(currentPlaylist-1==-1)
-            currentPlaylist=playlistObservableList.size()-1;
+        if (currentPlaylist - 1 == -1)
+            currentPlaylist = playlistObservableList.size() - 1;
         else
             currentPlaylist--;
 
@@ -155,19 +155,40 @@ public class MainController {
     }
 
     public void onNextPlaylistClick(MouseEvent mouseEvent) {
-        if(playlistObservableList.size()<2)
+        if (playlistObservableList.size() < 2)
             return;
-        if(currentPlaylist+1==playlistObservableList.size())
-            currentPlaylist=0;
+        if (currentPlaylist + 1 == playlistObservableList.size())
+            currentPlaylist = 0;
         else
             currentPlaylist++;
 
         loadPlaylist();
     }
 
-    private void loadPlaylist(){
+    private void loadPlaylist() {
         ObservableList<Track> tracks = playlistObservableList.get(currentPlaylist).getTrackObservableList();
         setPlaylistNameToTextField(playlistObservableList.get(currentPlaylist).getName());
         fillPlaylist(tracks);
+    }
+
+    public void onDeletePlaylistClick(MouseEvent mouseEvent) {
+        if (playlistObservableList.size() == 0)
+            return;
+
+        playlistObservableList.remove(currentPlaylist);
+
+        if (playlistObservableList.size() == 0) {
+            clearPlaylistInformation();
+            return;
+        }
+        if (currentPlaylist == playlistObservableList.size())
+            currentPlaylist--;
+
+        loadPlaylist();
+    }
+
+    private void clearPlaylistInformation() {
+        tfPlaylistName.setText("");
+        lwSongs.getItems().clear();
     }
 }

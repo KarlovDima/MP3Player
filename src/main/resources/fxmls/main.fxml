@@ -182,6 +182,7 @@
                             </cursor>
                         </ImageView>
                         <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="368.0" pickOnBounds="true"
+                                   onMouseClicked="#onDeletePlaylistClick"
                                    preserveRatio="true" y="23.0" AnchorPane.rightAnchor="80.0">
                             <image>
                                 <Image url="@../images/delete_playlist.png"/>
