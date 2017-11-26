@@ -4,8 +4,8 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextField;
-import com.karlov.mp3player.models.Track;
 import com.karlov.mp3player.models.Playlist;
+import com.karlov.mp3player.models.Track;
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
@@ -81,6 +81,7 @@ public class AddPlaylistController {
                 track.setTitle(id3v2Tag.getTitle());
                 track.setPath(file.getPath());
                 track.setYear(Integer.parseInt(id3v2Tag.getYear()));
+                track.setImage(id3v2Tag.getAlbumImage());
                 tracks.add(track);
                 track.setLength(getLength((int) mp3File.getLengthInSeconds()));
             } catch (IOException e) {

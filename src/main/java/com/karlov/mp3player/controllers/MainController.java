@@ -8,9 +8,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -19,17 +21,28 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class MainController {
+public class MainController implements Initializable {
     @FXML
     ImageView ivAddPlaylist;
-
     @FXML
     JFXListView<AnchorPane> lwSongs;
-
     @FXML
     JFXTextField tfPlaylistName;
+    @FXML
+    Label lbSongTitle;
+    @FXML
+    Label lbSongArtist;
+    @FXML
+    Label lbSongAlbum;
+    @FXML
+    Label lbSongDuration;
+    @FXML
+    ImageView iwAlbumImage;
 
     private FXMLLoader fxmlLoader = new FXMLLoader();
     private Stage mainStage;
@@ -38,6 +51,32 @@ public class MainController {
     private Parent fxmlAddPlaylist;
     private ObservableList<Playlist> playlistObservableList = FXCollections.observableArrayList();
     private int currentPlaylist;
+
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        initializeListeners();
+    }
+
+    private void initializeListeners() {
+        lwSongs.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.intValue() != -1) onSongSelected(newValue.intValue());
+        });
+    }
+
+    private void onSongSelected(int selectedSong) {
+        Track track = playlistObservableList.get(currentPlaylist).getTrackObservableList().get(selectedSong);
+        changeSongInformation(track);
+    }
+
+    private void changeSongInformation(Track track) {
+        lbSongTitle.setText(track.getTitle());
+        lbSongArtist.setText(track.getArtist());
+        lbSongAlbum.setText(track.getAlbum());
+        lbSongDuration.setText("0:00/" + track.getLength());
+        Image image = new Image(new ByteArrayInputStream(track.getImage()));
+        iwAlbumImage.setImage(image);
+    }
 
     public void setMainStage(Stage mainStage) {
         this.mainStage = mainStage;

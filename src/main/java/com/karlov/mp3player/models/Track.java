@@ -14,10 +14,10 @@ public class Track {
     private String artist;
     private String length;
     private int year;
-    private Image image;
+    private byte[] image;
 
     public Track() {
-        title=new SimpleStringProperty("");
+        title = new SimpleStringProperty("");
     }
 
     public Track(String path) {
@@ -72,11 +72,11 @@ public class Track {
         this.year = year;
     }
 
-    public Image getImage() {
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(Image image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 
