@@ -1,6 +1,7 @@
 package com.karlov.mp3player.controllers;
 
 import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
 import com.karlov.mp3player.models.Playlist;
 import com.karlov.mp3player.models.Track;
@@ -43,6 +44,10 @@ public class MainController implements Initializable {
     Label lbSongDuration;
     @FXML
     ImageView iwAlbumImage;
+    @FXML
+    ImageView iwVolumeImage;
+    @FXML
+    JFXSlider slVolumeSlider;
 
     private FXMLLoader fxmlLoader = new FXMLLoader();
     private Stage mainStage;
@@ -51,7 +56,6 @@ public class MainController implements Initializable {
     private Parent fxmlAddPlaylist;
     private ObservableList<Playlist> playlistObservableList = FXCollections.observableArrayList();
     private int currentPlaylist;
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -62,11 +66,20 @@ public class MainController implements Initializable {
         lwSongs.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.intValue() != -1) onSongSelected(newValue.intValue());
         });
+
+        slVolumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> onVolumeChanged(oldValue.intValue(), newValue.intValue()));
     }
 
     private void onSongSelected(int selectedSong) {
         Track track = playlistObservableList.get(currentPlaylist).getTrackObservableList().get(selectedSong);
         changeSongInformation(track);
+    }
+
+    private void onVolumeChanged(int oldValue, int newValue) {
+        if (newValue == 0)
+            iwVolumeImage.setImage(new Image("images/volume_off.png"));
+        if (oldValue == 0 && newValue > 0)
+            iwVolumeImage.setImage(new Image("images/volume_on.png"));
     }
 
     private void changeSongInformation(Track track) {
@@ -229,5 +242,15 @@ public class MainController implements Initializable {
     private void clearPlaylistInformation() {
         tfPlaylistName.setText("");
         lwSongs.getItems().clear();
+    }
+
+    public void onVolumeClicked(MouseEvent mouseEvent) {
+        if (slVolumeSlider.getValue() == 0) {
+            iwVolumeImage.setImage(new Image("images/volume_on.png"));
+            slVolumeSlider.setValue(50);
+        } else {
+            slVolumeSlider.setValue(0);
+            iwVolumeImage.setImage(new Image("images/volume_off.png"));
+        }
     }
 }

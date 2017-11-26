@@ -58,7 +58,7 @@
                             </HBox.margin>
                         </ImageView>
 
-                                                  <JFXSlider layoutX="325.0" layoutY="68.0" minHeight="157.0" orientation="VERTICAL" prefHeight="157.0" prefWidth="20.0" stylesheets="@../css/volume_slider.css" AnchorPane.rightAnchor="20.0">
+                                                  <JFXSlider fx:id="slVolumeSlider" layoutX="325.0" layoutY="68.0" minHeight="157.0" orientation="VERTICAL" prefHeight="157.0" prefWidth="20.0" stylesheets="@../css/volume_slider.css" AnchorPane.rightAnchor="20.0">
                               <VBox.margin>
                                   <Insets left="10.0" top="12.0" />
                               </VBox.margin>
@@ -66,13 +66,16 @@
                                   <Insets />
                               </opaqueInsets>
                           </JFXSlider>
-                          <ImageView fitHeight="38.0" fitWidth="38.0" layoutX="315.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="10.0">
+                          <ImageView fx:id="iwVolumeImage" fitHeight="38.0" fitWidth="38.0" layoutX="315.0" layoutY="18.0" onMouseClicked="#onVolumeClicked" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="10.0">
                               <image>
-                                  <Image url="@../images/volume.png" />
+                                  <Image url="@../images/volume_on.png" />
                               </image>
                               <VBox.margin>
                                   <Insets top="11.0" />
                               </VBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                           </ImageView>
                </children>
             </AnchorPane>
