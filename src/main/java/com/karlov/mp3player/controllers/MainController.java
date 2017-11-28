@@ -50,6 +50,8 @@ public class MainController implements Initializable {
     ImageView iwVolumeImage;
     @FXML
     JFXSlider slVolumeSlider;
+    @FXML
+    ImageView iwPlayPause;
 
     private FXMLLoader fxmlLoader = new FXMLLoader();
     private Stage mainStage;
@@ -125,10 +127,25 @@ public class MainController implements Initializable {
         lbSongDuration.setText("0:00/" + track.getLength());
         Image image = new Image(new ByteArrayInputStream(track.getImage()));
         iwAlbumImage.setImage(image);
+        iwPlayPause.setImage(new Image("images/pause.png"));
     }
 
     public void setMainStage(Stage mainStage) {
         this.mainStage = mainStage;
+    }
+
+    public void onPlayPauseClick(MouseEvent mouseEvent) {
+        if (mediaPlayer == null)
+            return;
+
+        if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+            iwPlayPause.setImage(new Image("images/play.png"));
+            mediaPlayer.pause();
+        }
+        else if (mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED) {
+            iwPlayPause.setImage(new Image("images/pause.png"));
+            mediaPlayer.play();
+        }
     }
 
     public void onAddPlaylistClick(MouseEvent mouseEvent) {
