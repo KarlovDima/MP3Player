@@ -102,13 +102,16 @@
                                 <Insets bottom="44.0" left="25.0" top="44.0" />
                             </HBox.margin>
                         </ImageView>
-                        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="iwPreviousSong" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#onPreviousSongClick" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../images/previous_song.png" />
                             </image>
                             <HBox.margin>
                                 <Insets bottom="30.0" left="60.0" top="30.0" />
                             </HBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                         </ImageView>
                         <ImageView fx:id="iwPlayPause" fitHeight="80.0" fitWidth="80.0" onMouseClicked="#onPlayPauseClick" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -121,13 +124,16 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                         </ImageView>
-                        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="iwNextSong" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#onNextSongClick" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../images/next_song.png" />
                             </image>
                             <HBox.margin>
                                 <Insets bottom="30.0" left="50.0" top="30.0" />
                             </HBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                         </ImageView>
                         <ImageView fitHeight="33.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                             <image>
