@@ -17,6 +17,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
@@ -56,6 +58,7 @@ public class MainController implements Initializable {
     private Parent fxmlAddPlaylist;
     private ObservableList<Playlist> playlistObservableList = FXCollections.observableArrayList();
     private int currentPlaylist;
+    private MediaPlayer mediaPlayer;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -70,16 +73,49 @@ public class MainController implements Initializable {
         slVolumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> onVolumeChanged(oldValue.intValue(), newValue.intValue()));
     }
 
-    private void onSongSelected(int selectedSong) {
-        Track track = playlistObservableList.get(currentPlaylist).getTrackObservableList().get(selectedSong);
-        changeSongInformation(track);
-    }
-
     private void onVolumeChanged(int oldValue, int newValue) {
         if (newValue == 0)
             iwVolumeImage.setImage(new Image("images/volume_off.png"));
         if (oldValue == 0 && newValue > 0)
             iwVolumeImage.setImage(new Image("images/volume_on.png"));
+    }
+
+    private void onSongSelected(int selectedSong) {
+        Track track = playlistObservableList.get(currentPlaylist).getTrackObservableList().get(selectedSong);
+        changeSongInformation(track);
+        playSong(getFileURL(track.getPath()));
+    }
+
+    private String getFileURL(String path) {
+        String cleanURL = cleanURL(path);
+
+        return "file:///" + cleanURL;
+    }
+
+    private static String cleanURL(String url) {
+        url = url.replace("\\", "/");
+        url = url.replaceAll(" ", "%20");
+        url = url.replace("[", "%5B");
+        url = url.replace("]", "%5D");
+        return url;
+    }
+
+    private void playSong(String fileURL) {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer = null;
+        }
+
+        mediaPlayer = new MediaPlayer(new Media(fileURL));
+        mediaPlayer.play();
+        mediaPlayer.setOnEndOfMedia(() -> onSongEnding());
+    }
+
+    private void onSongEnding() {
+        int index = lwSongs.getSelectionModel().getSelectedIndex();
+        if (index != playlistObservableList.get(currentPlaylist).getTrackObservableList().size() - 1)
+            lwSongs.getSelectionModel().select(index + 1);
+        else lwSongs.getSelectionModel().select(-1);
     }
 
     private void changeSongInformation(Track track) {

@@ -26,16 +26,12 @@ import java.io.IOException;
 public class AddPlaylistController {
     @FXML
     JFXTextField tfPlaylistName;
-
     @FXML
     JFXButton btnPlaylistPath;
-
     @FXML
     JFXButton btnSave;
-
     @FXML
     JFXButton btnCancel;
-
     @FXML
     StackPane stackPane;
 
@@ -82,8 +78,8 @@ public class AddPlaylistController {
                 track.setPath(file.getPath());
                 track.setYear(Integer.parseInt(id3v2Tag.getYear()));
                 track.setImage(id3v2Tag.getAlbumImage());
-                tracks.add(track);
                 track.setLength(getLength((int) mp3File.getLengthInSeconds()));
+                tracks.add(track);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (UnsupportedTagException e) {
