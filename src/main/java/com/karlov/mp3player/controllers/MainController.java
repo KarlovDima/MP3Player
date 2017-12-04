@@ -90,16 +90,25 @@ public class MainController implements Initializable {
     }
 
     private void onVolumeChanged(int oldValue, int newValue) {
-        if (newValue == 0)
+        setVolume(slVolumeSlider.getValue() / 100);
+        if (newValue == 0) {
             iwVolumeImage.setImage(new Image("images/volume_off.png"));
-        if (oldValue == 0 && newValue > 0)
+        }
+        if (oldValue == 0 && newValue > 0) {
             iwVolumeImage.setImage(new Image("images/volume_on.png"));
+        }
+    }
+
+    private void setVolume(double value) {
+        if (mediaPlayer != null)
+            mediaPlayer.setVolume(value);
     }
 
     private void onSongSelected(int selectedSong) {
         Track track = playlistObservableList.get(currentPlaylist).getTrackObservableList().get(selectedSong);
         changeSongInformation(track);
         playSong(getFileURL(track.getPath()));
+        setVolume(slVolumeSlider.getValue() / 100);
     }
 
     private String getFileURL(String path) {
