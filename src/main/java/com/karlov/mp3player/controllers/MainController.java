@@ -27,6 +27,9 @@ import javafx.stage.Stage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -56,6 +59,10 @@ public class MainController implements Initializable {
     ImageView iwPreviousSong;
     @FXML
     ImageView iwNextSong;
+    @FXML
+    ImageView iwRepeatSong;
+    @FXML
+    ImageView iwShuffleSongs;
 
     private FXMLLoader fxmlLoader = new FXMLLoader();
     private Stage mainStage;
@@ -65,6 +72,9 @@ public class MainController implements Initializable {
     private ObservableList<Playlist> playlistObservableList = FXCollections.observableArrayList();
     private int currentPlaylist;
     private MediaPlayer mediaPlayer;
+    private boolean isRepeat = false;
+    private boolean isShuffle = false;
+    private List<Integer> shuffledIndexes = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -119,6 +129,22 @@ public class MainController implements Initializable {
 
     private void onSongEnding() {
         int index = lwSongs.getSelectionModel().getSelectedIndex();
+
+        if (isShuffle) {
+            int currentTrack = lwSongs.getSelectionModel().getSelectedIndex();
+            int nextTrackIndex = shuffledIndexes.indexOf(currentTrack);
+            if (nextTrackIndex + 1 == shuffledIndexes.size()) {
+                lwSongs.getSelectionModel().select(-1);
+                return;
+            }
+            int nextTrack = shuffledIndexes.get(nextTrackIndex + 1);
+            lwSongs.getSelectionModel().select(nextTrack);
+        }
+        if (isRepeat) {
+            onSongSelected(index);
+            return;
+        }
+
         if (index != playlistObservableList.get(currentPlaylist).getTrackObservableList().size() - 1)
             lwSongs.getSelectionModel().select(index + 1);
         else lwSongs.getSelectionModel().select(-1);
@@ -152,6 +178,15 @@ public class MainController implements Initializable {
     }
 
     public void onPreviousSongClick(MouseEvent mouseEvent) {
+        if (isShuffle) {
+            int currentTrack = lwSongs.getSelectionModel().getSelectedIndex();
+            int previousTrackIndex = shuffledIndexes.indexOf(currentTrack);
+            if (previousTrackIndex - 1 == -1)
+                return;
+            int previousTrack = shuffledIndexes.get(previousTrackIndex - 1);
+            lwSongs.getSelectionModel().select(previousTrack);
+            return;
+        }
         int currentTrack = lwSongs.getSelectionModel().getSelectedIndex();
         if (currentTrack == 0)
             return;
@@ -159,10 +194,63 @@ public class MainController implements Initializable {
     }
 
     public void onNextSongClick(MouseEvent mouseEvent) {
+        if (isShuffle) {
+            int currentTrack = lwSongs.getSelectionModel().getSelectedIndex();
+            int nextTrackIndex = shuffledIndexes.indexOf(currentTrack);
+            if (nextTrackIndex + 1 == shuffledIndexes.size())
+                return;
+            int nextTrack = shuffledIndexes.get(nextTrackIndex + 1);
+            lwSongs.getSelectionModel().select(nextTrack);
+            return;
+        }
         int currentTrack = lwSongs.getSelectionModel().getSelectedIndex();
         if (currentTrack == lwSongs.getItems().size() - 1)
             return;
         lwSongs.getSelectionModel().select(currentTrack + 1);
+    }
+
+    public void onRepeatSongClick(MouseEvent mouseEvent) {
+        if (isRepeat) {
+            iwRepeatSong.setImage(new Image("images/repeat_song.png"));
+            isRepeat = false;
+        } else {
+            iwRepeatSong.setImage(new Image("images/repeat_song_activated.png"));
+            isRepeat = true;
+        }
+    }
+
+    public void onShuffleSongsClick(MouseEvent mouseEvent) {
+        if (isShuffle)
+            clearShuffle();
+        else {
+            iwShuffleSongs.setImage(new Image("images/shuffle_song_activated.png"));
+            isShuffle = true;
+            if (lwSongs.getItems().size() == 0)
+                return;
+            shuffleSongs();
+        }
+    }
+
+    private void clearShuffle() {
+        iwShuffleSongs.setImage(new Image("images/shuffle_song.png"));
+        isShuffle = false;
+        shuffledIndexes.clear();
+    }
+
+    private void shuffleSongs() {
+        int size = lwSongs.getItems().size();
+        for (int i = 0; i < size; i++)
+            shuffledIndexes.add(i);
+
+        Collections.shuffle(shuffledIndexes);
+
+        int currentTrack = lwSongs.getSelectionModel().getSelectedIndex();
+        if (currentTrack == -1) {
+            lwSongs.getSelectionModel().select(0);
+            currentTrack = 0;
+        }
+        shuffledIndexes.remove(shuffledIndexes.indexOf(currentTrack));
+        shuffledIndexes.add(0, currentTrack);
     }
 
     public void onAddPlaylistClick(MouseEvent mouseEvent) {
@@ -170,6 +258,8 @@ public class MainController implements Initializable {
         addPlaylistController.setPlaylist(new Playlist());
         showAddPlaylistDialog();
         loadNewPlaylist();
+        isShuffle = false;
+        clearShuffle();
     }
 
     private void loadNewPlaylist() {
