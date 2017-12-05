@@ -78,7 +78,7 @@ public class AddPlaylistController {
                 track.setPath(file.getPath());
                 track.setYear(Integer.parseInt(id3v2Tag.getYear()));
                 track.setImage(id3v2Tag.getAlbumImage());
-                track.setLength(getLength((int) mp3File.getLengthInSeconds()));
+                track.setLength((int) mp3File.getLengthInSeconds());
                 tracks.add(track);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -103,15 +103,6 @@ public class AddPlaylistController {
 
     private void setPlaylistNameToTextField(String name) {
         tfPlaylistName.setText(name);
-    }
-
-    private String getLength(int lengthInSeconds) {
-        int minutes = lengthInSeconds / 60;
-        int seconds = lengthInSeconds - minutes * 60;
-        if (seconds < 10)
-            return minutes + ":0" + seconds;
-        return minutes + ":" + seconds;
-
     }
 
     @FXML

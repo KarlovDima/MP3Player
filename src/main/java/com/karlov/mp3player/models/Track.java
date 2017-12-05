@@ -9,7 +9,7 @@ public class Track {
     private String path;
     private String album;
     private String artist;
-    private String length;
+    private int length;
     private int year;
     private byte[] image;
 
@@ -69,11 +69,11 @@ public class Track {
         this.image = image;
     }
 
-    public String getLength() {
+    public int getLength() {
         return length;
     }
 
-    public void setLength(String length) {
+    public void setLength(int length) {
         this.length = length;
     }
 }

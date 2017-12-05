@@ -1,8 +1,26 @@
-.jfx-slider .thumb{
+.slider .thumb{
    -fx-background-color:#cb5e64;
        -fx-pref-height: 25;
        -fx-pref-width: 25;
 }
-.jfx-slider .track {
+.slider .track {
     -fx-pref-height:10;
+    -fx-control-inner-background: null;
+}
+.progress-bar .bar {
+    -fx-background-color:#cb5e64;
+
+}
+.progress-bar > .track{
+    -fx-background-color: #cccccc;
+}
+.progress-bar > .bar,
+.progress-bar:indeterminate > .bar{
+    -fx-background-color: #cb5e64;
+    -fx-padding: 5;
+}
+.progress-bar > .track,
+.progress-bar > .bar {
+    -fx-background-radius: 5;
+    -fx-background-insets: 0;
 }

@@ -13,6 +13,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -23,6 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -46,13 +49,15 @@ public class MainController implements Initializable {
     @FXML
     Label lbSongAlbum;
     @FXML
+    Label lbSongYear;
+    @FXML
     Label lbSongDuration;
     @FXML
     ImageView iwAlbumImage;
     @FXML
     ImageView iwVolumeImage;
     @FXML
-    JFXSlider slVolumeSlider;
+    JFXSlider slVolume;
     @FXML
     ImageView iwPlayPause;
     @FXML
@@ -63,6 +68,10 @@ public class MainController implements Initializable {
     ImageView iwRepeatSong;
     @FXML
     ImageView iwShuffleSongs;
+    @FXML
+    Slider slSongTime;
+    @FXML
+    ProgressBar pbSongTime;
 
     private FXMLLoader fxmlLoader = new FXMLLoader();
     private Stage mainStage;
@@ -75,6 +84,7 @@ public class MainController implements Initializable {
     private boolean isRepeat = false;
     private boolean isShuffle = false;
     private List<Integer> shuffledIndexes = new ArrayList<>();
+    private Track currentTrack;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -85,12 +95,23 @@ public class MainController implements Initializable {
         lwSongs.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.intValue() != -1) onSongSelected(newValue.intValue());
         });
+        slVolume.valueProperty().addListener((observable, oldValue, newValue) -> onVolumeChanged(oldValue.intValue(), newValue.intValue()));
+        slSongTime.valueProperty().addListener(observable -> {
+            if (slSongTime.isPressed())
+                onTimeChanged();
+        });
+    }
 
-        slVolumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> onVolumeChanged(oldValue.intValue(), newValue.intValue()));
+    private void onSongSelected(int selectedSong) {
+        changeDisableProperty(false);
+        setCurrentTrack(selectedSong);
+        changeSongInformation();
+        playSong(getFileURL(currentTrack.getPath()));
+        setVolume(slVolume.getValue() / 100);
     }
 
     private void onVolumeChanged(int oldValue, int newValue) {
-        setVolume(slVolumeSlider.getValue() / 100);
+        setVolume(slVolume.getValue() / 100);
         if (newValue == 0) {
             iwVolumeImage.setImage(new Image("images/volume_off.png"));
         }
@@ -99,21 +120,70 @@ public class MainController implements Initializable {
         }
     }
 
+    private void onTimeChanged() {
+        mediaPlayer.seek(Duration.seconds(slSongTime.getValue()));
+        setProgress();
+        updateTrackLengthLabel();
+    }
+
+    private void changeDisableProperty(boolean isDisabled) {
+        slSongTime.setDisable(isDisabled);
+        pbSongTime.setDisable(isDisabled);
+    }
+
+    private void setCurrentTrack(int index) {
+        currentTrack = playlistObservableList.get(currentPlaylist).getTrackObservableList().get(index);
+    }
+
+    private void changeSongInformation() {
+        lbSongTitle.setText(currentTrack.getTitle());
+        lbSongArtist.setText(currentTrack.getArtist());
+        lbSongAlbum.setText(currentTrack.getAlbum());
+        lbSongYear.setText(currentTrack.getYear() + "");
+        Image image = new Image(new ByteArrayInputStream(currentTrack.getImage()));
+        iwAlbumImage.setImage(image);
+        iwPlayPause.setImage(new Image("images/pause.png"));
+    }
+
+    private void playSong(String fileURL) {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer = null;
+        }
+
+        mediaPlayer = new MediaPlayer(new Media(fileURL));
+
+        mediaPlayer.setOnReady(() -> {
+            mediaPlayer.play();
+            mediaPlayer.currentTimeProperty().addListener((observableValue, duration, current) -> {
+                if (!slSongTime.isPressed()) {
+                    slSongTime.setValue(current.toSeconds());
+                    setProgress();
+                }
+                updateTrackLengthLabel();
+            });
+            slSongTime.setMax(currentTrack.getLength());
+        });
+        mediaPlayer.setOnEndOfMedia(this::onSongEnding);
+    }
+
     private void setVolume(double value) {
         if (mediaPlayer != null)
             mediaPlayer.setVolume(value);
     }
 
-    private void onSongSelected(int selectedSong) {
-        Track track = playlistObservableList.get(currentPlaylist).getTrackObservableList().get(selectedSong);
-        changeSongInformation(track);
-        playSong(getFileURL(track.getPath()));
-        setVolume(slVolumeSlider.getValue() / 100);
+    private void setProgress() {
+        pbSongTime.setProgress(slSongTime.getValue() / slSongTime.getMax());
+    }
+
+    private void updateTrackLengthLabel() {
+        String currentTime = getLength((int) slSongTime.getValue());
+        String totalTime = getLength(currentTrack.getLength());
+        lbSongDuration.setText(currentTime + "/" + totalTime);
     }
 
     private String getFileURL(String path) {
         String cleanURL = cleanURL(path);
-
         return "file:///" + cleanURL;
     }
 
@@ -125,48 +195,52 @@ public class MainController implements Initializable {
         return url;
     }
 
-    private void playSong(String fileURL) {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer = null;
-        }
-
-        mediaPlayer = new MediaPlayer(new Media(fileURL));
-        mediaPlayer.play();
-        mediaPlayer.setOnEndOfMedia(() -> onSongEnding());
+    private String getLength(int lengthInSeconds) {
+        int minutes = lengthInSeconds / 60;
+        int seconds = lengthInSeconds - minutes * 60;
+        if (seconds < 10)
+            return minutes + ":0" + seconds;
+        return minutes + ":" + seconds;
     }
 
     private void onSongEnding() {
         int index = lwSongs.getSelectionModel().getSelectedIndex();
 
+        if (isRepeat) {
+            onSongSelected(index);
+            return;
+        }
         if (isShuffle) {
-            int currentTrack = lwSongs.getSelectionModel().getSelectedIndex();
-            int nextTrackIndex = shuffledIndexes.indexOf(currentTrack);
+            int nextTrackIndex = shuffledIndexes.indexOf(index);
             if (nextTrackIndex + 1 == shuffledIndexes.size()) {
                 lwSongs.getSelectionModel().select(-1);
+                clearSongInformation();
                 return;
             }
             int nextTrack = shuffledIndexes.get(nextTrackIndex + 1);
             lwSongs.getSelectionModel().select(nextTrack);
-        }
-        if (isRepeat) {
-            onSongSelected(index);
             return;
         }
 
         if (index != playlistObservableList.get(currentPlaylist).getTrackObservableList().size() - 1)
             lwSongs.getSelectionModel().select(index + 1);
-        else lwSongs.getSelectionModel().select(-1);
+        else {
+            lwSongs.getSelectionModel().select(-1);
+            clearSongInformation();
+        }
     }
 
-    private void changeSongInformation(Track track) {
-        lbSongTitle.setText(track.getTitle());
-        lbSongArtist.setText(track.getArtist());
-        lbSongAlbum.setText(track.getAlbum());
-        lbSongDuration.setText("0:00/" + track.getLength());
-        Image image = new Image(new ByteArrayInputStream(track.getImage()));
-        iwAlbumImage.setImage(image);
-        iwPlayPause.setImage(new Image("images/pause.png"));
+    private void clearSongInformation() {
+        lbSongTitle.setText("");
+        lbSongArtist.setText("");
+        lbSongAlbum.setText("");
+        lbSongYear.setText("");
+        iwAlbumImage.setImage(null);
+        iwPlayPause.setImage(new Image("images/play.png"));
+        lbSongDuration.setText("");
+        pbSongTime.setProgress(0);
+        slSongTime.setValue(0);
+        changeDisableProperty(true);
     }
 
     public void setMainStage(Stage mainStage) {
@@ -187,35 +261,37 @@ public class MainController implements Initializable {
     }
 
     public void onPreviousSongClick(MouseEvent mouseEvent) {
+        int currentTrackIndex = lwSongs.getSelectionModel().getSelectedIndex();
+
         if (isShuffle) {
-            int currentTrack = lwSongs.getSelectionModel().getSelectedIndex();
-            int previousTrackIndex = shuffledIndexes.indexOf(currentTrack);
+            int previousTrackIndex = shuffledIndexes.indexOf(currentTrackIndex);
             if (previousTrackIndex - 1 == -1)
                 return;
             int previousTrack = shuffledIndexes.get(previousTrackIndex - 1);
             lwSongs.getSelectionModel().select(previousTrack);
             return;
         }
-        int currentTrack = lwSongs.getSelectionModel().getSelectedIndex();
-        if (currentTrack == 0)
+
+        if (currentTrackIndex == 0)
             return;
-        lwSongs.getSelectionModel().select(currentTrack - 1);
+        lwSongs.getSelectionModel().select(currentTrackIndex - 1);
     }
 
     public void onNextSongClick(MouseEvent mouseEvent) {
+        int currentTrackIndex = lwSongs.getSelectionModel().getSelectedIndex();
+
         if (isShuffle) {
-            int currentTrack = lwSongs.getSelectionModel().getSelectedIndex();
-            int nextTrackIndex = shuffledIndexes.indexOf(currentTrack);
+            int nextTrackIndex = shuffledIndexes.indexOf(currentTrackIndex);
             if (nextTrackIndex + 1 == shuffledIndexes.size())
                 return;
             int nextTrack = shuffledIndexes.get(nextTrackIndex + 1);
             lwSongs.getSelectionModel().select(nextTrack);
             return;
         }
-        int currentTrack = lwSongs.getSelectionModel().getSelectedIndex();
-        if (currentTrack == lwSongs.getItems().size() - 1)
+
+        if (currentTrackIndex == lwSongs.getItems().size() - 1 || currentTrackIndex == -1)
             return;
-        lwSongs.getSelectionModel().select(currentTrack + 1);
+        lwSongs.getSelectionModel().select(currentTrackIndex + 1);
     }
 
     public void onRepeatSongClick(MouseEvent mouseEvent) {
@@ -281,7 +357,7 @@ public class MainController implements Initializable {
     }
 
     private void addPlaylist(Playlist playlist) {
-        playlistObservableList.add(addPlaylistController.getPlaylist());
+        playlistObservableList.add(playlist);
         currentPlaylist = playlistObservableList.size() - 1;
     }
 
@@ -327,7 +403,7 @@ public class MainController implements Initializable {
     }
 
     private Label getSongLengthLabel(Track track) {
-        Label length = new Label(track.getLength());
+        Label length = new Label(getLength(track.getLength()));
         length.setFont(Font.font("Tahoma Regular", 17));
         length.setTextFill(Color.WHITE);
 
@@ -414,11 +490,11 @@ public class MainController implements Initializable {
     }
 
     public void onVolumeClicked(MouseEvent mouseEvent) {
-        if (slVolumeSlider.getValue() == 0) {
+        if (slVolume.getValue() == 0) {
             iwVolumeImage.setImage(new Image("images/volume_on.png"));
-            slVolumeSlider.setValue(50);
+            slVolume.setValue(50);
         } else {
-            slVolumeSlider.setValue(0);
+            slVolume.setValue(0);
             iwVolumeImage.setImage(new Image("images/volume_off.png"));
         }
     }
