@@ -3,6 +3,7 @@ package com.karlov.mp3player.controllers;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
+import com.karlov.mp3player.utills.MP3Chooser;
 import com.karlov.mp3player.models.Playlist;
 import com.karlov.mp3player.models.Track;
 import javafx.collections.FXCollections;
@@ -10,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -38,6 +40,8 @@ import java.util.ResourceBundle;
 public class MainController implements Initializable {
     @FXML
     ImageView ivAddPlaylist;
+    @FXML
+    ImageView ivAddTrack;
     @FXML
     JFXListView<AnchorPane> lwSongs;
     @FXML
@@ -79,7 +83,7 @@ public class MainController implements Initializable {
     private AddPlaylistController addPlaylistController;
     private Parent fxmlAddPlaylist;
     private ObservableList<Playlist> playlistObservableList = FXCollections.observableArrayList();
-    private int currentPlaylist;
+    private Playlist currentPlaylist;
     private MediaPlayer mediaPlayer;
     private boolean isRepeat = false;
     private boolean isShuffle = false;
@@ -103,7 +107,7 @@ public class MainController implements Initializable {
     }
 
     private void onSongSelected(int selectedSong) {
-        changeDisableProperty(false);
+        changeSeekBarDisableProperty(false);
         setCurrentTrack(selectedSong);
         changeSongInformation();
         playSong(getFileURL(currentTrack.getPath()));
@@ -126,13 +130,13 @@ public class MainController implements Initializable {
         updateTrackLengthLabel();
     }
 
-    private void changeDisableProperty(boolean isDisabled) {
+    private void changeSeekBarDisableProperty(boolean isDisabled) {
         slSongTime.setDisable(isDisabled);
         pbSongTime.setDisable(isDisabled);
     }
 
     private void setCurrentTrack(int index) {
-        currentTrack = playlistObservableList.get(currentPlaylist).getTrackObservableList().get(index);
+        currentTrack = currentPlaylist.getTrackObservableList().get(index);
     }
 
     private void changeSongInformation() {
@@ -146,13 +150,8 @@ public class MainController implements Initializable {
     }
 
     private void playSong(String fileURL) {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer = null;
-        }
-
+        setNullMediaPlayerIfNecessary();
         mediaPlayer = new MediaPlayer(new Media(fileURL));
-
         mediaPlayer.setOnReady(() -> {
             mediaPlayer.play();
             mediaPlayer.currentTimeProperty().addListener((observableValue, duration, current) -> {
@@ -160,11 +159,19 @@ public class MainController implements Initializable {
                     slSongTime.setValue(current.toSeconds());
                     setProgress();
                 }
-                updateTrackLengthLabel();
+                if (mediaPlayer != null)
+                    updateTrackLengthLabel();
             });
             slSongTime.setMax(currentTrack.getLength());
         });
         mediaPlayer.setOnEndOfMedia(this::onSongEnding);
+    }
+
+    private void setNullMediaPlayerIfNecessary() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer = null;
+        }
     }
 
     private void setVolume(double value) {
@@ -211,23 +218,27 @@ public class MainController implements Initializable {
             return;
         }
         if (isShuffle) {
-            int nextTrackIndex = shuffledIndexes.indexOf(index);
-            if (nextTrackIndex + 1 == shuffledIndexes.size()) {
-                lwSongs.getSelectionModel().select(-1);
-                clearSongInformation();
-                return;
-            }
-            int nextTrack = shuffledIndexes.get(nextTrackIndex + 1);
-            lwSongs.getSelectionModel().select(nextTrack);
+            onShuffledSongEnding(index);
             return;
         }
 
-        if (index != playlistObservableList.get(currentPlaylist).getTrackObservableList().size() - 1)
+        if (index != currentPlaylist.getTrackObservableList().size() - 1)
             lwSongs.getSelectionModel().select(index + 1);
         else {
             lwSongs.getSelectionModel().select(-1);
             clearSongInformation();
         }
+    }
+
+    private void onShuffledSongEnding(int index) {
+        int nextTrackIndex = shuffledIndexes.indexOf(index);
+        if (nextTrackIndex + 1 == shuffledIndexes.size()) {
+            lwSongs.getSelectionModel().select(-1);
+            clearSongInformation();
+            return;
+        }
+        int nextTrack = shuffledIndexes.get(nextTrackIndex + 1);
+        lwSongs.getSelectionModel().select(nextTrack);
     }
 
     private void clearSongInformation() {
@@ -237,10 +248,10 @@ public class MainController implements Initializable {
         lbSongYear.setText("");
         iwAlbumImage.setImage(null);
         iwPlayPause.setImage(new Image("images/play.png"));
-        lbSongDuration.setText("");
         pbSongTime.setProgress(0);
         slSongTime.setValue(0);
-        changeDisableProperty(true);
+        lbSongDuration.setText("");
+        changeSeekBarDisableProperty(true);
     }
 
     public void setMainStage(Stage mainStage) {
@@ -338,27 +349,47 @@ public class MainController implements Initializable {
         shuffledIndexes.add(0, currentTrack);
     }
 
+    public void onAddTrackClick(MouseEvent mouseEvent) {
+        Playlist playlist = MP3Chooser.getPlaylistFromFiles(getStage(mouseEvent));
+        if (playlist == null)
+            return;
+        tfPlaylistName.setDisable(false);
+        loadNewPlaylist(playlist);
+        clearShuffle();
+    }
+
+    private Stage getStage(MouseEvent mouseEvent) {
+        Node node = (Node) mouseEvent.getSource();
+        return (Stage) node.getScene().getWindow();
+    }
+
     public void onAddPlaylistClick(MouseEvent mouseEvent) {
         loadAddPlaylistFXML();
         addPlaylistController.setPlaylist(new Playlist());
         showAddPlaylistDialog();
-        loadNewPlaylist();
-        isShuffle = false;
+        Playlist playlist = addPlaylistController.getPlaylist();
+        if (playlist.getPath() == null)
+            return;
+        tfPlaylistName.setDisable(false);
+        loadNewPlaylist(playlist);
         clearShuffle();
     }
 
-    private void loadNewPlaylist() {
-        addPlaylist(addPlaylistController.getPlaylist());
-        ObservableList<Track> tracks = playlistObservableList.get(playlistObservableList.size() - 1).getTrackObservableList();
+    private void loadNewPlaylist(Playlist playlist) {
+        addPlaylist(playlist);
+        ObservableList<Track> tracks = currentPlaylist.getTrackObservableList();
         if (tracks == null)
             return;
-        setPlaylistNameToTextField(playlistObservableList.get(playlistObservableList.size() - 1).getName());
+        setPlaylistNameToTextField(currentPlaylist.getName());
+        tfPlaylistName.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (currentPlaylist != null) currentPlaylist.setName(newValue);
+        });
         fillPlaylist(tracks);
     }
 
     private void addPlaylist(Playlist playlist) {
         playlistObservableList.add(playlist);
-        currentPlaylist = playlistObservableList.size() - 1;
+        currentPlaylist = playlistObservableList.get(playlistObservableList.size() - 1);
     }
 
     private void setPlaylistNameToTextField(String name) {
@@ -443,10 +474,10 @@ public class MainController implements Initializable {
     public void onPreviousPlaylistClick(MouseEvent mouseEvent) {
         if (playlistObservableList.size() < 2)
             return;
-        if (currentPlaylist - 1 == -1)
-            currentPlaylist = playlistObservableList.size() - 1;
+        if (playlistObservableList.indexOf(currentPlaylist) == 0)
+            currentPlaylist = playlistObservableList.get(playlistObservableList.size() - 1);
         else
-            currentPlaylist--;
+            currentPlaylist = playlistObservableList.get(playlistObservableList.indexOf(currentPlaylist) - 1);
 
         loadPlaylist();
     }
@@ -454,17 +485,17 @@ public class MainController implements Initializable {
     public void onNextPlaylistClick(MouseEvent mouseEvent) {
         if (playlistObservableList.size() < 2)
             return;
-        if (currentPlaylist + 1 == playlistObservableList.size())
-            currentPlaylist = 0;
+        if (playlistObservableList.indexOf(currentPlaylist) + 1 == playlistObservableList.size())
+            currentPlaylist = playlistObservableList.get(0);
         else
-            currentPlaylist++;
+            currentPlaylist = playlistObservableList.get(playlistObservableList.indexOf(currentPlaylist) + 1);
 
         loadPlaylist();
     }
 
     private void loadPlaylist() {
-        ObservableList<Track> tracks = playlistObservableList.get(currentPlaylist).getTrackObservableList();
-        setPlaylistNameToTextField(playlistObservableList.get(currentPlaylist).getName());
+        ObservableList<Track> tracks = currentPlaylist.getTrackObservableList();
+        setPlaylistNameToTextField(currentPlaylist.getName());
         fillPlaylist(tracks);
     }
 
@@ -475,17 +506,22 @@ public class MainController implements Initializable {
         playlistObservableList.remove(currentPlaylist);
 
         if (playlistObservableList.size() == 0) {
+            setNullMediaPlayerIfNecessary();
+            currentPlaylist = null;
+            currentTrack = null;
+            clearSongInformation();
             clearPlaylistInformation();
             return;
         }
-        if (currentPlaylist == playlistObservableList.size())
-            currentPlaylist--;
+        if (playlistObservableList.indexOf(currentPlaylist) == playlistObservableList.size())
+            currentPlaylist = playlistObservableList.get(playlistObservableList.size() - 1);
 
         loadPlaylist();
     }
 
     private void clearPlaylistInformation() {
         tfPlaylistName.setText("");
+        tfPlaylistName.setDisable(true);
         lwSongs.getItems().clear();
     }
 
