@@ -1,6 +1,7 @@
 package com.karlov.mp3player.start;
 
 import com.karlov.mp3player.controllers.MainController;
+import com.karlov.mp3player.utills.HibernateConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

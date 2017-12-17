@@ -6,35 +6,33 @@ import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class MP3Chooser {
     private static FileChooser fileChooser;
     private static DirectoryChooser directoryChooser;
+    private static Playlist playlist;
 
     private MP3Chooser() {
     }
 
     public static Playlist getPlaylistFromFiles(Stage stage) {
-        Playlist playlist = new Playlist();
-
+        playlist = new Playlist();
         fileChooser = new FileChooser();
         configureFileChooser();
         List<File> files = getSelectedFiles(stage);
         if (files == null)
             return null;
         playlist.setName("Untitled");
-        playlist.setPath(files.get(0).getParent());
-        playlist.setTrackObservableList(getTracksObservableList(files));
+        playlist.setTracksArrayList(getTracksArrayList(files));
 
         return playlist;
     }
@@ -49,8 +47,7 @@ public class MP3Chooser {
     }
 
     public static Playlist getPlaylistFromDirectory(Stage stage) {
-        Playlist playlist = new Playlist();
-
+        playlist = new Playlist();
         directoryChooser = new DirectoryChooser();
         configureDirectoryChooser();
         File directory = getSelectedDirectory(stage);
@@ -58,8 +55,7 @@ public class MP3Chooser {
             return null;
         List<File> mp3Files = Arrays.asList(getFilesInDirectory(directory));
         playlist.setName(directory.getName());
-        playlist.setPath(directory.getPath());
-        playlist.setTrackObservableList(getTracksObservableList(mp3Files));
+        playlist.setTracksArrayList(getTracksArrayList(mp3Files));
 
         return playlist;
     }
@@ -76,11 +72,10 @@ public class MP3Chooser {
         return directory.listFiles((dir, name) -> name.toLowerCase().endsWith(".mp3"));
     }
 
-    private static ObservableList<Track> getTracksObservableList(List<File> files) {
-        ObservableList<Track> tracks = FXCollections.observableArrayList();
-        for (File file : files) {
+    private static List<Track> getTracksArrayList(List<File> files) {
+        List<Track> tracks = new ArrayList<>();
+        for (File file : files)
             tracks.add(getTrack(file));
-        }
         return tracks;
     }
 
@@ -89,6 +84,7 @@ public class MP3Chooser {
         try {
             Mp3File mp3File = new Mp3File(file);
             ID3v2 id3v2Tag = mp3File.getId3v2Tag();
+            track.setPlaylist(playlist);
             track.setAlbum(id3v2Tag.getAlbum());
             track.setArtist(id3v2Tag.getArtist());
             track.setTitle(id3v2Tag.getTitle());

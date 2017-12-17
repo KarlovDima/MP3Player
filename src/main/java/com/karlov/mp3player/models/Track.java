@@ -1,32 +1,61 @@
 package com.karlov.mp3player.models;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javax.persistence.*;
 
+@Entity
+@Table(name="track")
 public class Track {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
+    private int id;
 
-    private StringProperty title;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "playlist_id", nullable = false)
+    private Playlist playlist;
+
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "path")
     private String path;
+
+    @Column(name = "album")
     private String album;
+
+    @Column(name = "artist")
     private String artist;
+
+    @Column(name = "length")
     private int length;
+
+    @Column(name = "year")
     private int year;
+
+    @Column(name = "image")
     private byte[] image;
 
     public Track() {
-        title = new SimpleStringProperty("");
     }
 
-    public Track(String path) {
-        this.path = path;
+    public int getId() {
+        return id;
+    }
+
+    public Playlist getPlaylist() {
+        return playlist;
+    }
+
+    public void setPlaylist(Playlist playlist) {
+        this.playlist = playlist;
     }
 
     public String getTitle() {
-        return title.get();
+        return title;
     }
 
     public void setTitle(String title) {
-        this.title.set(title);
+        this.title = title;
     }
 
     public String getPath() {

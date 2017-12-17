@@ -4,8 +4,8 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextField;
-import com.karlov.mp3player.utills.MP3Chooser;
 import com.karlov.mp3player.models.Playlist;
+import com.karlov.mp3player.utills.MP3Chooser;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -41,7 +41,7 @@ public class AddPlaylistController {
         playlist = MP3Chooser.getPlaylistFromDirectory(getStage(actionEvent));
         if (playlist == null)
             return;
-        if (tfPlaylistName.getText().equals(""))
+        if (tfPlaylistName.getText() == null || tfPlaylistName.getText().equals(""))
             setPlaylistNameToTextField(playlist.getName());
     }
 
@@ -56,7 +56,7 @@ public class AddPlaylistController {
 
     @FXML
     public void onSaveButtonClick(ActionEvent actionEvent) {
-        if (playlist == null || playlist.getPath() == null) {
+        if (playlist == null || playlist.getTracksArrayList() == null) {
             showDialog();
         } else {
             playlist.setName(tfPlaylistName.getText());

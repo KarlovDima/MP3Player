@@ -3,11 +3,11 @@ package com.karlov.mp3player.controllers;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
-import com.karlov.mp3player.utills.MP3Chooser;
+import com.karlov.mp3player.dao.DAOFactory;
 import com.karlov.mp3player.models.Playlist;
 import com.karlov.mp3player.models.Track;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import com.karlov.mp3player.utills.HibernateConnection;
+import com.karlov.mp3player.utills.MP3Chooser;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -82,7 +82,7 @@ public class MainController implements Initializable {
     private Stage addPlaylistStage;
     private AddPlaylistController addPlaylistController;
     private Parent fxmlAddPlaylist;
-    private ObservableList<Playlist> playlistObservableList = FXCollections.observableArrayList();
+    private List<Playlist> playlistArrayList = new ArrayList<>();
     private Playlist currentPlaylist;
     private MediaPlayer mediaPlayer;
     private boolean isRepeat = false;
@@ -93,6 +93,7 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeListeners();
+        loadFromDatabase();
     }
 
     private void initializeListeners() {
@@ -104,6 +105,25 @@ public class MainController implements Initializable {
             if (slSongTime.isPressed())
                 onTimeChanged();
         });
+
+        tfPlaylistName.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue)
+                if (currentPlaylist != null)
+                    if (!currentPlaylist.getName().equals(tfPlaylistName.getText())) {
+                        currentPlaylist.setName(tfPlaylistName.getText());
+                        updateDataBase();
+                    }
+        });
+    }
+
+    private void loadFromDatabase() {
+        playlistArrayList = DAOFactory.getInstance().getPlaylistDAO().getAllPlaylists();
+        if (playlistArrayList.size() == 0)
+            return;
+        currentPlaylist = playlistArrayList.get(0);
+
+        tfPlaylistName.setDisable(false);
+        loadPlaylist();
     }
 
     private void onSongSelected(int selectedSong) {
@@ -136,7 +156,7 @@ public class MainController implements Initializable {
     }
 
     private void setCurrentTrack(int index) {
-        currentTrack = currentPlaylist.getTrackObservableList().get(index);
+        currentTrack = currentPlaylist.getTracksArrayList().get(index);
     }
 
     private void changeSongInformation() {
@@ -222,7 +242,7 @@ public class MainController implements Initializable {
             return;
         }
 
-        if (index != currentPlaylist.getTrackObservableList().size() - 1)
+        if (index != currentPlaylist.getTracksArrayList().size() - 1)
             lwSongs.getSelectionModel().select(index + 1);
         else {
             lwSongs.getSelectionModel().select(-1);
@@ -256,9 +276,10 @@ public class MainController implements Initializable {
 
     public void setMainStage(Stage mainStage) {
         this.mainStage = mainStage;
+        mainStage.setOnCloseRequest(event -> HibernateConnection.getSessionFactory().close());
     }
 
-    public void onPlayPauseClick(MouseEvent mouseEvent) {
+    public void onPlayPauseClick() {
         if (mediaPlayer == null)
             return;
 
@@ -271,7 +292,7 @@ public class MainController implements Initializable {
         }
     }
 
-    public void onPreviousSongClick(MouseEvent mouseEvent) {
+    public void onPreviousSongClick() {
         int currentTrackIndex = lwSongs.getSelectionModel().getSelectedIndex();
 
         if (isShuffle) {
@@ -288,7 +309,7 @@ public class MainController implements Initializable {
         lwSongs.getSelectionModel().select(currentTrackIndex - 1);
     }
 
-    public void onNextSongClick(MouseEvent mouseEvent) {
+    public void onNextSongClick() {
         int currentTrackIndex = lwSongs.getSelectionModel().getSelectedIndex();
 
         if (isShuffle) {
@@ -305,7 +326,7 @@ public class MainController implements Initializable {
         lwSongs.getSelectionModel().select(currentTrackIndex + 1);
     }
 
-    public void onRepeatSongClick(MouseEvent mouseEvent) {
+    public void onRepeatSongClick() {
         if (isRepeat) {
             iwRepeatSong.setImage(new Image("images/repeat_song.png"));
             isRepeat = false;
@@ -315,7 +336,7 @@ public class MainController implements Initializable {
         }
     }
 
-    public void onShuffleSongsClick(MouseEvent mouseEvent) {
+    public void onShuffleSongsClick() {
         if (isShuffle)
             clearShuffle();
         else {
@@ -363,12 +384,12 @@ public class MainController implements Initializable {
         return (Stage) node.getScene().getWindow();
     }
 
-    public void onAddPlaylistClick(MouseEvent mouseEvent) {
+    public void onAddPlaylistClick() {
         loadAddPlaylistFXML();
         addPlaylistController.setPlaylist(new Playlist());
         showAddPlaylistDialog();
         Playlist playlist = addPlaylistController.getPlaylist();
-        if (playlist.getPath() == null)
+        if (playlist == null || playlist.getTracksArrayList() == null)
             return;
         tfPlaylistName.setDisable(false);
         loadNewPlaylist(playlist);
@@ -377,26 +398,33 @@ public class MainController implements Initializable {
 
     private void loadNewPlaylist(Playlist playlist) {
         addPlaylist(playlist);
-        ObservableList<Track> tracks = currentPlaylist.getTrackObservableList();
+        saveToDataBase();
+        List<Track> tracks = currentPlaylist.getTracksArrayList();
         if (tracks == null)
             return;
         setPlaylistNameToTextField(currentPlaylist.getName());
-        tfPlaylistName.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (currentPlaylist != null) currentPlaylist.setName(newValue);
-        });
         fillPlaylist(tracks);
     }
 
     private void addPlaylist(Playlist playlist) {
-        playlistObservableList.add(playlist);
-        currentPlaylist = playlistObservableList.get(playlistObservableList.size() - 1);
+        playlistArrayList.add(playlist);
+        currentPlaylist = playlistArrayList.get(playlistArrayList.size() - 1);
+    }
+
+    private void saveToDataBase() {
+        DAOFactory.getInstance().getPlaylistDAO().addPlaylist(currentPlaylist);
+        DAOFactory.getInstance().getTrackDAO().addTracks(currentPlaylist.getTracksArrayList());
+    }
+
+    private void updateDataBase() {
+        DAOFactory.getInstance().getPlaylistDAO().updatePlaylist(currentPlaylist);
     }
 
     private void setPlaylistNameToTextField(String name) {
         tfPlaylistName.setText(name);
     }
 
-    private void fillPlaylist(ObservableList<Track> tracks) {
+    private void fillPlaylist(List<Track> tracks) {
         clearSongsInListView();
 
         for (Track track : tracks) {
@@ -471,41 +499,45 @@ public class MainController implements Initializable {
         addPlaylistStage.showAndWait();
     }
 
-    public void onPreviousPlaylistClick(MouseEvent mouseEvent) {
-        if (playlistObservableList.size() < 2)
+    public void onPreviousPlaylistClick() {
+        if (playlistArrayList.size() < 2)
             return;
-        if (playlistObservableList.indexOf(currentPlaylist) == 0)
-            currentPlaylist = playlistObservableList.get(playlistObservableList.size() - 1);
+        lbSongTitle.requestFocus();
+        if (playlistArrayList.indexOf(currentPlaylist) == 0)
+            currentPlaylist = playlistArrayList.get(playlistArrayList.size() - 1);
         else
-            currentPlaylist = playlistObservableList.get(playlistObservableList.indexOf(currentPlaylist) - 1);
+            currentPlaylist = playlistArrayList.get(playlistArrayList.indexOf(currentPlaylist) - 1);
 
         loadPlaylist();
     }
 
-    public void onNextPlaylistClick(MouseEvent mouseEvent) {
-        if (playlistObservableList.size() < 2)
+    public void onNextPlaylistClick() {
+        if (playlistArrayList.size() < 2)
             return;
-        if (playlistObservableList.indexOf(currentPlaylist) + 1 == playlistObservableList.size())
-            currentPlaylist = playlistObservableList.get(0);
+        lbSongTitle.requestFocus();
+        if (playlistArrayList.indexOf(currentPlaylist) + 1 == playlistArrayList.size())
+            currentPlaylist = playlistArrayList.get(0);
         else
-            currentPlaylist = playlistObservableList.get(playlistObservableList.indexOf(currentPlaylist) + 1);
+            currentPlaylist = playlistArrayList.get(playlistArrayList.indexOf(currentPlaylist) + 1);
 
         loadPlaylist();
     }
 
     private void loadPlaylist() {
-        ObservableList<Track> tracks = currentPlaylist.getTrackObservableList();
+        List<Track> tracks = currentPlaylist.getTracksArrayList();
         setPlaylistNameToTextField(currentPlaylist.getName());
         fillPlaylist(tracks);
     }
 
-    public void onDeletePlaylistClick(MouseEvent mouseEvent) {
-        if (playlistObservableList.size() == 0)
+    public void onDeletePlaylistClick() {
+        if (playlistArrayList.size() == 0)
             return;
+        int index = playlistArrayList.indexOf(currentPlaylist);
 
-        playlistObservableList.remove(currentPlaylist);
+        deleteFromDatabase();
+        playlistArrayList.remove(currentPlaylist);
 
-        if (playlistObservableList.size() == 0) {
+        if (playlistArrayList.size() == 0) {
             setNullMediaPlayerIfNecessary();
             currentPlaylist = null;
             currentTrack = null;
@@ -513,10 +545,17 @@ public class MainController implements Initializable {
             clearPlaylistInformation();
             return;
         }
-        if (playlistObservableList.indexOf(currentPlaylist) == playlistObservableList.size())
-            currentPlaylist = playlistObservableList.get(playlistObservableList.size() - 1);
+
+        if (index == playlistArrayList.size())
+            currentPlaylist = playlistArrayList.get(playlistArrayList.size() - 1);
+        else
+            currentPlaylist = playlistArrayList.get(index);
 
         loadPlaylist();
+    }
+
+    private void deleteFromDatabase() {
+        DAOFactory.getInstance().getPlaylistDAO().deletePlaylist(currentPlaylist);
     }
 
     private void clearPlaylistInformation() {
@@ -525,7 +564,7 @@ public class MainController implements Initializable {
         lwSongs.getItems().clear();
     }
 
-    public void onVolumeClicked(MouseEvent mouseEvent) {
+    public void onVolumeClicked() {
         if (slVolume.getValue() == 0) {
             iwVolumeImage.setImage(new Image("images/volume_on.png"));
             slVolume.setValue(50);

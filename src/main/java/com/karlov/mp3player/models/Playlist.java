@@ -1,45 +1,44 @@
 package com.karlov.mp3player.models;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.collections.ObservableList;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
+@Entity
+@Table(name = "playlist")
 public class Playlist {
-    private StringProperty name;
-    private String path;
-    private ObservableList<Track> trackObservableList;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
+    private int id;
+
+    @Column(name = "name")
+    private String name;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "playlist")
+    private List<Track> tracksArrayList;
 
     public Playlist() {
-        name=new SimpleStringProperty("");
+
     }
 
-    public Playlist(StringProperty name, String path, ObservableList<Track> trackObservableList) {
-        this.name = name;
-        this.path = path;
-        this.trackObservableList = trackObservableList;
+    public int getId() {
+        return id;
     }
 
     public String getName() {
-        return name.get();
+        return name;
     }
 
     public void setName(String name) {
-        this.name.set(name);
+        this.name = name;
     }
 
-    public String getPath() {
-        return path;
+    public List<Track> getTracksArrayList() {
+        return tracksArrayList;
     }
 
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public ObservableList<Track> getTrackObservableList() {
-        return trackObservableList;
-    }
-
-    public void setTrackObservableList(ObservableList<Track> trackObservableList) {
-        this.trackObservableList = trackObservableList;
+    public void setTracksArrayList(List<Track> tracksArrayList) {
+        this.tracksArrayList = tracksArrayList;
     }
 }
