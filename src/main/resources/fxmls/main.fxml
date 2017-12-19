@@ -1,163 +1,173 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXSlider?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="459.0" prefWidth="971.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.karlov.mp3player.controllers.MainController">
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="459.0"
+      prefWidth="971.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.karlov.mp3player.controllers.MainController">
     <children>
         <VBox fillWidth="false">
             <children>
                 <AnchorPane prefHeight="289.0" prefWidth="505.0" VBox.vgrow="ALWAYS">
                     <children>
-                        <Label fx:id="lbSongArtist" layoutX="190.0" layoutY="68.0" prefHeight="25.0" prefWidth="255.0" textFill="#878384">
+                        <Label fx:id="lbSongArtist" layoutX="190.0" layoutY="68.0" prefHeight="25.0" prefWidth="255.0"
+                               textFill="#878384">
                             <font>
-                                <Font name="Tahoma" size="20.0" />
+                                <Font name="Tahoma" size="20.0"/>
                             </font>
                             <VBox.margin>
-                                <Insets left="10.0" />
+                                <Insets left="10.0"/>
                             </VBox.margin>
                         </Label>
-                        <Label fx:id="lbSongAlbum" layoutX="190.0" layoutY="93.0" prefHeight="25.0" prefWidth="255.0" textFill="#878384">
+                        <Label fx:id="lbSongAlbum" layoutX="190.0" layoutY="93.0" prefHeight="25.0" prefWidth="255.0"
+                               textFill="#878384">
                             <font>
-                                <Font name="Tahoma" size="20.0" />
+                                <Font name="Tahoma" size="20.0"/>
                             </font>
                             <VBox.margin>
-                                <Insets left="10.0" />
+                                <Insets left="10.0"/>
                             </VBox.margin>
                         </Label>
-                        <Label fx:id="lbSongTitle" layoutX="190.0" layoutY="30.0" prefHeight="38.0" prefWidth="255.0" textFill="#878384">
+                        <Label fx:id="lbSongTitle" layoutX="190.0" layoutY="30.0" prefHeight="38.0" prefWidth="255.0"
+                               textFill="#878384">
                             <font>
-                                <Font name="Tahoma" size="30.0" />
+                                <Font name="Tahoma" size="30.0"/>
                             </font>
                             <VBox.margin>
-                                <Insets left="10.0" />
+                                <Insets left="10.0"/>
                             </VBox.margin>
                         </Label>
-                        <Label fx:id="lbSongYear" layoutX="190.0" layoutY="118.0" prefHeight="25.0" prefWidth="255.0" textFill="#878384">
+                        <Label fx:id="lbSongYear" layoutX="190.0" layoutY="118.0" prefHeight="25.0" prefWidth="255.0"
+                               textFill="#878384">
                             <font>
-                                <Font name="Tahoma" size="20.0" />
+                                <Font name="Tahoma" size="20.0"/>
                             </font>
                         </Label>
-                        <ImageView fx:id="iwAlbumImage" fitHeight="150.0" fitWidth="150.0" layoutX="30.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="iwAlbumImage" fitHeight="150.0" fitWidth="150.0" layoutX="30.0" layoutY="30.0"
+                                   pickOnBounds="true" preserveRatio="true">
                             <HBox.margin>
-                                <Insets left="30.0" top="30.0" />
+                                <Insets left="30.0" top="30.0"/>
                             </HBox.margin>
                         </ImageView>
 
-                        <JFXSlider fx:id="slVolume" layoutX="325.0" layoutY="68.0" minHeight="157.0" orientation="VERTICAL" prefHeight="157.0" prefWidth="20.0" stylesheets="@../css/volume_slider.css" AnchorPane.rightAnchor="20.0">
+                        <JFXSlider fx:id="slVolume" layoutX="325.0" layoutY="68.0" minHeight="157.0"
+                                   orientation="VERTICAL" prefHeight="157.0" prefWidth="20.0"
+                                   stylesheets="@../css/volume_slider.css" AnchorPane.rightAnchor="20.0">
                             <VBox.margin>
-                                <Insets left="10.0" top="12.0" />
+                                <Insets left="10.0" top="12.0"/>
                             </VBox.margin>
                             <opaqueInsets>
-                                <Insets />
+                                <Insets/>
                             </opaqueInsets>
                         </JFXSlider>
-                        <ImageView fx:id="iwVolumeImage" fitHeight="38.0" fitWidth="38.0" layoutX="315.0" layoutY="18.0" onMouseClicked="#onVolumeClicked" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="10.0">
+                        <ImageView fx:id="iwVolumeImage" fitHeight="38.0" fitWidth="38.0" layoutX="315.0" layoutY="18.0"
+                                   onMouseClicked="#onVolumeClicked" pickOnBounds="true" preserveRatio="true"
+                                   AnchorPane.rightAnchor="10.0">
                             <image>
-                                <Image url="@../images/volume_on.png" />
+                                <Image url="@../images/volume_on.png"/>
                             </image>
                             <VBox.margin>
-                                <Insets top="11.0" />
+                                <Insets top="11.0"/>
                             </VBox.margin>
                             <cursor>
-                                <Cursor fx:constant="HAND" />
+                                <Cursor fx:constant="HAND"/>
                             </cursor>
                         </ImageView>
-                        <Label fx:id="lbSongDuration" layoutX="397.0" layoutY="263.0" textFill="#878384" AnchorPane.rightAnchor="20.0">
+                        <Label fx:id="lbSongDuration" layoutX="397.0" layoutY="263.0" textFill="#878384"
+                               AnchorPane.rightAnchor="20.0">
                             <font>
-                                <Font name="Tahoma" size="20.0" />
+                                <Font name="Tahoma" size="20.0"/>
                             </font>
                         </Label>
                     </children>
                 </AnchorPane>
                 <StackPane>
                     <children>
-                        <ProgressBar fx:id="pbSongTime" disable="true" prefWidth="450.0" progress="0.0" stylesheets="@../css/length_slider.css">
+                        <ProgressBar fx:id="pbSongTime" disable="true" prefWidth="450.0" progress="0.0"
+                                     stylesheets="@../css/length_slider.css">
                             <StackPane.margin>
-                                <Insets bottom="20.0" left="20.0" />
+                                <Insets bottom="20.0" left="20.0"/>
                             </StackPane.margin>
                         </ProgressBar>
-                        <Slider fx:id="slSongTime" disable="true" prefHeight="25.0" prefWidth="466.0" stylesheets="@../css/length_slider.css">
+                        <Slider fx:id="slSongTime" disable="true" prefHeight="25.0" prefWidth="466.0"
+                                stylesheets="@../css/length_slider.css">
                             <StackPane.margin>
-                                <Insets bottom="20.0" left="20.0" />
+                                <Insets bottom="20.0" left="20.0"/>
                             </StackPane.margin>
                         </Slider>
                     </children>
                 </StackPane>
                 <HBox alignment="TOP_CENTER" style="-fx-background-color: cb5e64;" AnchorPane.bottomAnchor="0.0">
                     <children>
-                        <ImageView fx:id="iwRepeatSong" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#onRepeatSongClick" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="iwRepeatSong" fitHeight="50.0" fitWidth="50.0"
+                                   onMouseClicked="#onRepeatSongClick" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../images/repeat_song.png" />
+                                <Image url="@../images/repeat_song.png"/>
                             </image>
                             <HBox.margin>
-                                <Insets bottom="30.0" left="30.0" top="30.0" />
+                                <Insets bottom="30.0" left="30.0" top="30.0"/>
                             </HBox.margin>
                             <cursor>
-                                <Cursor fx:constant="HAND" />
+                                <Cursor fx:constant="HAND"/>
                             </cursor>
                         </ImageView>
-                        <ImageView fx:id="iwPreviousSong" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#onPreviousSongClick" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="iwPreviousSong" fitHeight="50.0" fitWidth="50.0"
+                                   onMouseClicked="#onPreviousSongClick" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../images/previous_song.png" />
+                                <Image url="@../images/previous_song.png"/>
                             </image>
                             <HBox.margin>
-                                <Insets bottom="30.0" left="42.0" top="30.0" />
+                                <Insets bottom="30.0" left="42.0" top="30.0"/>
                             </HBox.margin>
                             <cursor>
-                                <Cursor fx:constant="HAND" />
+                                <Cursor fx:constant="HAND"/>
                             </cursor>
                         </ImageView>
-                        <ImageView fx:id="iwPlayPause" fitHeight="80.0" fitWidth="80.0" onMouseClicked="#onPlayPauseClick" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="iwPlayPause" fitHeight="80.0" fitWidth="80.0"
+                                   onMouseClicked="#onPlayPauseClick" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../images/play.png" />
+                                <Image url="@../images/play.png"/>
                             </image>
                             <HBox.margin>
-                                <Insets bottom="16.0" left="41.0" top="16.0" />
+                                <Insets bottom="16.0" left="41.0" top="16.0"/>
                             </HBox.margin>
                             <cursor>
-                                <Cursor fx:constant="HAND" />
+                                <Cursor fx:constant="HAND"/>
                             </cursor>
                         </ImageView>
-                        <ImageView fx:id="iwNextSong" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#onNextSongClick" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="iwNextSong" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#onNextSongClick"
+                                   pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../images/next_song.png" />
+                                <Image url="@../images/next_song.png"/>
                             </image>
                             <HBox.margin>
-                                <Insets bottom="30.0" left="41.0" top="30.0" />
+                                <Insets bottom="30.0" left="41.0" top="30.0"/>
                             </HBox.margin>
                             <cursor>
-                                <Cursor fx:constant="HAND" />
+                                <Cursor fx:constant="HAND"/>
                             </cursor>
                         </ImageView>
-                        <ImageView fx:id="iwShuffleSongs" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#onShuffleSongsClick" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="iwShuffleSongs" fitHeight="50.0" fitWidth="50.0"
+                                   onMouseClicked="#onShuffleSongsClick" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../images/shuffle_song.png" />
+                                <Image url="@../images/shuffle_song.png"/>
                             </image>
                             <HBox.margin>
-                                <Insets bottom="30.0" left="41.0" right="30.0" top="30.0" />
+                                <Insets bottom="30.0" left="41.0" right="30.0" top="30.0"/>
                             </HBox.margin>
                             <cursor>
-                                <Cursor fx:constant="HAND" />
+                                <Cursor fx:constant="HAND"/>
                             </cursor>
                         </ImageView>
                     </children>
                     <VBox.margin>
-                        <Insets />
+                        <Insets/>
                     </VBox.margin>
                 </HBox>
             </children>
@@ -165,62 +175,75 @@
         <VBox prefHeight="459.0" prefWidth="433.0" HBox.hgrow="ALWAYS">
             <children>
 
-                <AnchorPane maxHeight="-Infinity" prefHeight="95.0" prefWidth="402.0" style="-fx-background-color: cb5e64;" VBox.vgrow="ALWAYS">
+                <AnchorPane maxHeight="-Infinity" prefHeight="95.0" prefWidth="402.0"
+                            style="-fx-background-color: cb5e64;" VBox.vgrow="ALWAYS">
                     <children>
-                        <JFXTextField fx:id="tfPlaylistName" disable="true" focusColor="WHITE" prefHeight="68.0" prefWidth="268.0" style="-fx-text-inner-color: white;" unFocusColor="#cb5e64" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="184.0">
+                        <JFXTextField fx:id="tfPlaylistName" disable="true" focusColor="WHITE" prefHeight="68.0"
+                                      prefWidth="268.0" style="-fx-text-inner-color: white;" unFocusColor="#cb5e64"
+                                      AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="184.0">
                             <font>
-                                <Font name="Tahoma" size="25.0" />
+                                <Font name="Tahoma" size="25.0"/>
                             </font>
                         </JFXTextField>
-                        <ImageView fx:id="ivAddTrack" fitHeight="25.0" fitWidth="25.0" layoutX="188.0" onMouseClicked="#onAddTrackClick" pickOnBounds="true" preserveRatio="true" y="23.0" AnchorPane.rightAnchor="150.0">
+                        <ImageView fx:id="ivAddTrack" fitHeight="25.0" fitWidth="25.0" layoutX="188.0"
+                                   onMouseClicked="#onAddTrackClick" pickOnBounds="true" preserveRatio="true" y="23.0"
+                                   AnchorPane.rightAnchor="150.0">
                             <image>
-                                <Image url="@../images/add_file.png" />
+                                <Image url="@../images/add_file.png"/>
                             </image>
                             <cursor>
-                                <Cursor fx:constant="HAND" />
+                                <Cursor fx:constant="HAND"/>
                             </cursor>
                         </ImageView>
-                        <ImageView fx:id="ivAddPlaylist" fitHeight="25.0" fitWidth="25.0" layoutX="188.0" onMouseClicked="#onAddPlaylistClick" pickOnBounds="true" preserveRatio="true" y="25.0" AnchorPane.rightAnchor="115.0">
+                        <ImageView fx:id="ivAddPlaylist" fitHeight="25.0" fitWidth="25.0" layoutX="188.0"
+                                   onMouseClicked="#onAddPlaylistClick" pickOnBounds="true" preserveRatio="true"
+                                   y="25.0" AnchorPane.rightAnchor="115.0">
                             <image>
-                                <Image url="@../images/add_playlist.png" />
+                                <Image url="@../images/add_playlist.png"/>
                             </image>
                             <cursor>
-                                <Cursor fx:constant="HAND" />
+                                <Cursor fx:constant="HAND"/>
                             </cursor>
                         </ImageView>
-                        <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="368.0" onMouseClicked="#onDeletePlaylistClick" pickOnBounds="true" preserveRatio="true" y="23.0" AnchorPane.rightAnchor="80.0">
+                        <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="368.0"
+                                   onMouseClicked="#onDeletePlaylistClick" pickOnBounds="true" preserveRatio="true"
+                                   y="23.0" AnchorPane.rightAnchor="80.0">
                             <image>
-                                <Image url="@../images/delete_playlist.png" />
+                                <Image url="@../images/delete_playlist.png"/>
                             </image>
                             <cursor>
-                                <Cursor fx:constant="HAND" />
+                                <Cursor fx:constant="HAND"/>
                             </cursor>
                         </ImageView>
-                        <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="249.0" onMouseClicked="#onPreviousPlaylistClick" pickOnBounds="true" preserveRatio="true" y="23.0" AnchorPane.rightAnchor="45.0">
+                        <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="249.0"
+                                   onMouseClicked="#onPreviousPlaylistClick" pickOnBounds="true" preserveRatio="true"
+                                   y="23.0" AnchorPane.rightAnchor="45.0">
                             <image>
-                                <Image url="@../images/previous_playlist.png" />
+                                <Image url="@../images/previous_playlist.png"/>
                             </image>
                             <cursor>
-                                <Cursor fx:constant="HAND" />
+                                <Cursor fx:constant="HAND"/>
                             </cursor>
                         </ImageView>
-                        <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="280.0" onMouseClicked="#onNextPlaylistClick" pickOnBounds="true" preserveRatio="true" y="23.0" AnchorPane.rightAnchor="10.0">
+                        <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="280.0"
+                                   onMouseClicked="#onNextPlaylistClick" pickOnBounds="true" preserveRatio="true"
+                                   y="23.0" AnchorPane.rightAnchor="10.0">
                             <image>
-                                <Image url="@../images/next_playlist.png" />
+                                <Image url="@../images/next_playlist.png"/>
                             </image>
                             <cursor>
-                                <Cursor fx:constant="HAND" />
+                                <Cursor fx:constant="HAND"/>
                             </cursor>
                         </ImageView>
                     </children>
                 </AnchorPane>
 
-                <ScrollPane fitToWidth="true" focusTraversable="false" hbarPolicy="NEVER" prefHeight="411.0" prefWidth="402.0" style="-fx-background-color: a54a51;" styleClass="edge-to-edge" vbarPolicy="NEVER">
+                <ScrollPane fitToWidth="true" focusTraversable="false" hbarPolicy="NEVER" prefHeight="411.0"
+                            prefWidth="402.0" style="-fx-background-color: a54a51;" styleClass="edge-to-edge"
+                            vbarPolicy="NEVER">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="388.0" prefWidth="402.0">
-                            <children>
-                                <JFXListView fx:id="lwSongs" prefHeight="388.0" prefWidth="466.0" style="-fx-background-color: a54a51;" styleClass="custom-jfx-list-view1" stylesheets="@../css/listview.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                            </children>
+                        <AnchorPane fx:id="apSongListViewParent" minHeight="0.0" minWidth="0.0" prefHeight="388.0"
+                                    prefWidth="402.0" style="-fx-background-color: a54a51;">
                         </AnchorPane>
                     </content>
                 </ScrollPane>

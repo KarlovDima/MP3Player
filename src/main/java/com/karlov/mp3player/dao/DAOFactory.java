@@ -8,21 +8,21 @@ public class DAOFactory {
     private static PlaylistDAO playlistDAO;
     private static DAOFactory daoFactory;
 
-    public static synchronized DAOFactory getInstance(){
+    public static synchronized DAOFactory getInstance() {
         if (daoFactory == null)
             daoFactory = new DAOFactory();
         return daoFactory;
     }
 
-    public TrackDAO getTrackDAO(){
-        if (trackDAO == null){
+    public TrackDAO getTrackDAO() {
+        if (trackDAO == null) {
             trackDAO = new TrackDAOImplementation();
         }
         return trackDAO;
     }
 
-    public PlaylistDAO getPlaylistDAO(){
-        if (playlistDAO == null){
+    public PlaylistDAO getPlaylistDAO() {
+        if (playlistDAO == null) {
             playlistDAO = new PlaylistDAOImplementation();
         }
         return playlistDAO;

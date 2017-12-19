@@ -7,6 +7,7 @@ import com.jfoenix.controls.JFXTextField;
 import com.karlov.mp3player.models.Playlist;
 import com.karlov.mp3player.utills.MP3Chooser;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
@@ -60,7 +61,7 @@ public class AddPlaylistController {
             showDialog();
         } else {
             playlist.setName(tfPlaylistName.getText());
-            onCancelButtonClick(actionEvent);
+            closeDialog(actionEvent);
         }
     }
 
@@ -79,7 +80,12 @@ public class AddPlaylistController {
 
     @FXML
     public void onCancelButtonClick(ActionEvent actionEvent) {
-        Node node = (Node) actionEvent.getSource();
+        playlist = null;
+        closeDialog(actionEvent);
+    }
+
+    private void closeDialog(Event event) {
+        Node node = (Node) event.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
         stage.hide();
     }

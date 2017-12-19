@@ -3,7 +3,7 @@ package com.karlov.mp3player.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name="track")
+@Table(name = "track")
 public class Track {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
